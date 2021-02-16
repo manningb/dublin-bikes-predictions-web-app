@@ -13,8 +13,12 @@ def write_to_file(text):
     with open(r"data\bikes_{}".format(date_underscores).replace(" ", "_"), "w") as f:
         f.write(text)
 
-def write_to_db(text):
-    pass
+def stations_to_db(text):
+    stations = json.loads(text)
+    print(type(stations), len(stations))
+    for station in stations:
+        print(station)
+        vals = (station.get("address"))
 
 def main():
     print(os.path)
