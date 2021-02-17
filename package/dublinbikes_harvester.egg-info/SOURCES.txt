@@ -1,0 +1,9 @@
+README.md
+setup.py
+dublinbikes_harvester/__init__.py
+dublinbikes_harvester/__main__.py
+dublinbikes_harvester/my_secrets.py
+dublinbikes_harvester.egg-info/PKG-INFO
+dublinbikes_harvester.egg-info/SOURCES.txt
+dublinbikes_harvester.egg-info/dependency_links.txt
+dublinbikes_harvester.egg-info/top_level.txt
