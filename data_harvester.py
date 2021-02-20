@@ -5,12 +5,18 @@ import sqlalchemy as sqla
 from sqlalchemy import create_engine 
 import time
 import os
-#import my_secrets
+import my_secrets
 import pymysql
 import json
+import os
 
+DB_PASS=os.environ("DB_PASS")
+DB_URI=os.environ("DB_URI")
+DB_PORT=os.environ("DB_PORT")
+DB_DB=os.environ("DB_DB") 
+DB_USER=os.environ("DB_USER")
+APIKEY=os.environ("APIKEY")
 
-os.get
 
 NAME="Dublin"
 STATIONS="https://api.jcdecaux.com/vls/v1/stations/"
