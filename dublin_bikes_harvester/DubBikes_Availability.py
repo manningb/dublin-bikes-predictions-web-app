@@ -20,7 +20,7 @@ def availability_to_db(text, engine):
     now = datetime.datetime.utcnow()
     for station in stations:
         print(station)
-        vals = (int(station.get("number")), int(station.get("available_bikes")), int(station.get("available_bike_stands")), int(station.get("last_update")), station.get("status"), now)
+        vals = (int(station.get("number")), int(station.get("available_bikes")), int(station.get("available_bike_stands")), int(station.get("last_update")), str(station.get("status")), str(now.strftime('%Y-%m-%d %H:%M:%S')))
         engine.execute("INSERT INTO `dublin_bikes`.`availability` values(%s,%s,%s,%s,%s,%s)", vals)
     return
 
@@ -46,8 +46,6 @@ def main():
             time.sleep(5 * 60)
         except:
             print(traceback.format_exc())
-
-        return
 
 if __name__== "__main__":
     main()
