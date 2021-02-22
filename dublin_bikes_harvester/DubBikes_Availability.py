@@ -5,7 +5,7 @@ import requests
 import traceback
 import datetime
 import time
-
+from my_secrets import DB_USER, DB_PASS, DB_URL, APIKEY as DubBike_API
 # Imports for MySQL
 import pymysql
 from sqlalchemy import create_engine
@@ -31,17 +31,17 @@ def error_log(e):
     except FileExistsError:
         file = open("log.txt", "a")
     finally:
-        file.write(e + "\t" + now.strftime('%Y-%m-%d %H:%M:%S') + "\n")
+        file.write(str(e) + "\t" + str(now.strftime('%Y-%m-%d %H:%M:%S')) + "\n")
         file.close()
 
 def main():
-    DB_USER = os.environ.get("DB_USER")
-    DB_PASS = os.environ.get("DB_PASS")
-    DB_URL = os.environ.get("DB_URL")
-    DB_PORT = os.environ.get("DB_PORT")
+    #DB_USER = os.environ.get("DB_USER")
+    #DB_PASS = os.environ.get("DB_PASS")
+    #DB_URL = os.environ.get("DB_URL")
+    #DB_PORT = os.environ.get("DB_PORT")
 
     # API Key for Dublin Bikes JCDecaux
-    DubBike_API = os.environ.get("API_DubBike")
+    #DubBike_API = os.environ.get("API_DubBike")
     DubBike_NAME = "Dublin"
     DubBike_STATIONS = "https://api.jcdecaux.com/vls/v1/stations/"
     # Connect to database
@@ -55,6 +55,12 @@ def main():
             availability_to_db(r.text, engine)
             failures = 0
             time.sleep(5 * 60)
+        except AttributeError as e:
+            print(traceback.format_exc() + "\n ERROR: please stop the script and check for errors, request not generated correctly")
+            if failures < 5: failures += 1
+            error_log(e)
+            time.sleep(failures * 30)
+            print("got to here")
         except Exception as e:
             print(traceback.format_exc())
             if failures < 5: failures += 1
