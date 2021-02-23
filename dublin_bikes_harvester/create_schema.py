@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `dublin_bikes`.`availability` (
 number INTEGER,
 available_bikes INTEGER,
 available_bike_stands INTEGER,
-last_update INTEGER,
+last_update DATETIME,
 station_status VARCHAR(20),
 time_queried DATETIME,
 PRIMARY KEY (number, time_queried)
