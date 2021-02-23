@@ -14,7 +14,7 @@ DB_URL = os.environ.get("DB_URL")
 DB_PORT = os.environ.get("DB_PORT")
 
 #setup db connection
-engine = create_engine("mysql+pymysql://{0}:{1}@{2}/dublin_bikes".format(my_secrets.DB_USER, my_secrets.DB_PASS, my_secrets.DB_URI), echo=True) 
+engine = create_engine("mysql+pymysql://{0}:{1}@{2}/dublin_bikes".format(DB_USER, DB_PASS, DB_URL), echo=True) 
 connection = engine.connect()
 
 #csvs of data by quarter from 2020Q1 - Q4
@@ -52,4 +52,3 @@ for csv in quarters_csvs:
         if failures < 5: failures += 1
         error_log(e)
         time.sleep(failures * 30)
-
