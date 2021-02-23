@@ -61,7 +61,7 @@ def main():
             time.sleep(failures * 30)
             print("got to here")
         except Exception as e:
-            print(traceback.format_exc())
+            print(traceback.format_exc() + "\n ERROR: please stop the script and check for errors unknown error occured")
             if failures < 5: failures += 1
             error_log(e)
             time.sleep(failures * 30)
