@@ -18,8 +18,8 @@ def availability_to_db(text, engine):
     stations = json.loads(text)
     now = datetime.datetime.utcnow()
     for station in stations:
-        print(station)
-        vals = (int(station.get("number")), int(station.get("available_bikes")), int(station.get("available_bike_stands")), int(station.get("last_update")), str(station.get("status")), str(now.strftime('%Y-%m-%d %H:%M:%S')))
+        lupdate=datetime.datetime.fromtimestamp(int(station.get("last_update")) / 1000)
+        vals = (int(station.get("number")), int(station.get("available_bikes")), int(station.get("available_bike_stands")), str(lupdate), str(station.get("status")), str(now.strftime('%Y-%m-%d %H:%M:%S')))
         engine.execute("INSERT INTO `dublin_bikes`.`availability` values(%s,%s,%s,%s,%s,%s)", vals)
     return
 
