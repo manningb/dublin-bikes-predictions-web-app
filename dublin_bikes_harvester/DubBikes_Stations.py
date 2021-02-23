@@ -10,6 +10,7 @@ import time
 import pymysql
 from sqlalchemy import create_engine
 
+
 def stations_to_db(text, engine):
     """
     Read in static data of stations to the database
@@ -21,8 +22,8 @@ def stations_to_db(text, engine):
 
     # Loop through stations, adding each one to the database
     for station in stations:
-        stations_values = (station.get("address"),int(station.get("banking")), int(station.get("bike_stands")), int(station.get("bonus")),station.get("contract_name"), station.get("name"), station.get("number"), station.get("position").get("lat"), station.get("position").get("lng"), station.get("status"))
-        engine.execute("INSERT INTO `dublin_bikes`.`station` values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", stations_values)
+        stations_values = (station.get("address"),int(station.get("banking")), int(station.get("bike_stands")), int(station.get("bonus")),station.get("contract_name"), station.get("name"), station.get("number"), station.get("position").get("lat"), station.get("position").get("lng"))
+        engine.execute("INSERT INTO `dublin_bikes`.`station` values(%s,%s,%s,%s,%s,%s,%s,%s,%s)", stations_values)
     return
 
 def main():

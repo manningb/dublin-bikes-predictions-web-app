@@ -5,7 +5,6 @@ import requests
 import traceback
 import datetime
 import time
-
 # Imports for MySQL
 import pymysql
 from sqlalchemy import create_engine
@@ -20,10 +19,19 @@ def availability_to_db(text, engine):
     now = datetime.datetime.utcnow()
     for station in stations:
         print(station)
-        vals = (int(station.get("number")), int(station.get("available_bikes")), int(station.get("available_bike_stands")), int(station.get("last_update")), station.get("status"), now)
+        vals = (int(station.get("number")), int(station.get("available_bikes")), int(station.get("available_bike_stands")), int(station.get("last_update")), str(station.get("status")), str(now.strftime('%Y-%m-%d %H:%M:%S')))
         engine.execute("INSERT INTO `dublin_bikes`.`availability` values(%s,%s,%s,%s,%s,%s)", vals)
     return
 
+def error_log(e):
+    now = datetime.datetime.utcnow()
+    try:
+        file = open("log.txt", "x")
+    except FileExistsError:
+        file = open("log.txt", "a")
+    finally:
+        file.write(str(e) + "\t" + str(now.strftime('%Y-%m-%d %H:%M:%S')) + "\n")
+        file.close()
 
 def main():
     DB_USER = os.environ.get("DB_USER")
@@ -39,15 +47,24 @@ def main():
     engine = create_engine("mysql+pymysql://{0}:{1}@{2}".format(DB_USER, DB_PASS, DB_URL), echo=True)
 
     # Send requests to get all static data, then write to db
+    failures = 0
     while True:
         try:
             r = requests.get(DubBike_STATIONS, params={"apiKey": DubBike_API, "contract": DubBike_NAME})
             availability_to_db(r.text, engine)
+            failures = 0
             time.sleep(5 * 60)
-        except:
-            print(traceback.format_exc())
-
-        return
+        except AttributeError as e:
+            print(traceback.format_exc() + "\n ERROR: please stop the script and check for errors, request not generated correctly")
+            if failures < 5: failures += 1
+            error_log(e)
+            time.sleep(failures * 30)
+            print("got to here")
+        except Exception as e:
+            print(traceback.format_exc() + "\n ERROR: please stop the script and check for errors unknown error occured")
+            if failures < 5: failures += 1
+            error_log(e)
+            time.sleep(failures * 30)
 
 if __name__== "__main__":
     main()
