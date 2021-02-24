@@ -21,6 +21,7 @@ def availability_to_db(text, engine):
         try:
             lupdate=datetime.datetime.fromtimestamp(int(station.get("last_update")) / 1000)
         except TypeError:
+            print(station)
             lupdate = "0000-00-00 00:00:00"
         vals = (int(station.get("number")), int(station.get("available_bikes")), int(station.get("available_bike_stands")), lupdate, str(station.get("status")), str(now.strftime('%Y-%m-%d %H:%M:%S')))
         engine.execute("INSERT INTO `dublin_bikes`.`availability` values(%s,%s,%s,%s,%s,%s)", vals)
