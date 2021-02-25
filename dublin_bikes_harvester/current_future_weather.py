@@ -73,7 +73,7 @@ except Exception as e:
 
 def get_data(data):
     print(data)
-    return (str(datetime.datetime.fromtimestamp(data.get("dt"))), int(data.get("temp")), int(data.get("feels_like")), int(data.get("pressure")), int(data.get("humidity")), int(data.get("visibility")), int(data.get("wind_speed")), int(data.get("wind_deg")), str(data.get("weather")[0].get("main")), str(data.get("weather")[0].get("description")))
+    return (datetime.datetime.fromtimestamp(data.get("dt")), data.get("temp"), data.get("feels_like"), data.get("pressure"), data.get("humidity"), data.get("visibility"), data.get("wind_speed"), data.get("wind_deg"), data.get("weather")[0].get("main"), data.get("weather")[0].get("description"))
 
 
 def current_weather(text):
@@ -82,7 +82,6 @@ def current_weather(text):
     vals = get_data(current)
     engine.execute("INSERT INTO `dublin_bikes`.`current` values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", vals)
     return
-
 
 def hour_weather(text):
     data = json.loads(text)
@@ -109,7 +108,6 @@ def main():
             time.sleep(5 * 60)
             # if engine is None:
             # pass
-        return
 
 
 if __name__ == "__main__":
