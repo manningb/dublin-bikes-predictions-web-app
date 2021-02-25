@@ -166,9 +166,6 @@ def main():
     create_tables()
     #print(os.path)
 
-    # set count variable = 30
-    # we want forecast data to be fetched every half an hour
-
     while True:
         try:
             stations = get_dublin_bikes_stations().text
