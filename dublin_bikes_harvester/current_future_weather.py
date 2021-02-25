@@ -29,6 +29,7 @@ connection = engine.connect()
 
 sql_create_table1 = """
 CREATE TABLE IF NOT EXISTS `dublin_bikes`.`current` (
+time_queried DATETIME,
 last_update DATETIME,
 temp INTEGER,
 feels_like INTEGER,
@@ -44,6 +45,7 @@ weather_description VARCHAR(256)
 
 sql_create_table2 = """
 CREATE TABLE IF NOT EXISTS `dublin_bikes`.`forcast` (
+time_queried DATETIME,
 last_update DATETIME,
 temp INTEGER,
 feels_like INTEGER,
@@ -72,15 +74,15 @@ except Exception as e:
     print(e)
 
 def get_data(data):
-    print(data)
-    return (datetime.datetime.fromtimestamp(data.get("dt")), data.get("temp"), data.get("feels_like"), data.get("pressure"), data.get("humidity"), data.get("visibility"), data.get("wind_speed"), data.get("wind_deg"), data.get("weather")[0].get("main"), data.get("weather")[0].get("description"))
+    now = datetime.datetime.utcnow()
+    return (now, datetime.datetime.fromtimestamp(data.get("dt")), data.get("temp"), data.get("feels_like"), data.get("pressure"), data.get("humidity"), data.get("visibility"), data.get("wind_speed"), data.get("wind_deg"), data.get("weather")[0].get("main"), data.get("weather")[0].get("description"))
 
 
 def current_weather(text):
     data = json.loads(text)
     current = data["current"]
     vals = get_data(current)
-    engine.execute("INSERT INTO `dublin_bikes`.`current` values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", vals)
+    engine.execute("INSERT INTO `dublin_bikes`.`current` values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", vals)
     return
 
 def hour_weather(text):
@@ -88,7 +90,7 @@ def hour_weather(text):
     hourly = data["hourly"]
     for hour in hourly:
         vals = get_data(hour)
-        engine.execute("INSERT INTO `dublin_bikes`.`forcast` values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", vals)
+        engine.execute("INSERT INTO `dublin_bikes`.`forcast` values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", vals)
     return
 
 
