@@ -163,7 +163,7 @@ def get_dublin_bikes_stations():
 def main():
     global forecast_count
     # run create tables once
-    create_tables()
+    #create_tables()
     #print(os.path)
 
     while True:
