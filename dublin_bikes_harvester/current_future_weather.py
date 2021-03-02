@@ -21,7 +21,11 @@ WEATHERKEY = os.environ.get("WEATHERKEY")
 DB_USER = os.environ.get("DB_USER")
 DB_PASS = os.environ.get("DB_PASS")
 DB_URL = os.environ.get("DB_URL")
-forecast_count = 6
+
+# variables to scrape forecast every half an hour
+forecast_max = 12
+forecast_count = forecast_max
+
 # create connection to database using environment variables
 # initialise as global variable so all functions can use it
 print(DB_USER, DB_PASS, DB_URL)
@@ -90,7 +94,7 @@ def get_data(data, station_number):
     this function takes in the data and station number as input and returns a tuple with that data
     """
     now = datetime.datetime.utcnow()
-    return (station_number, now, datetime.datetime.fromtimestamp(data.get("dt")), data.get("temp"), data.get("feels_like"), data.get("pressure"), data.get("humidity"), data.get("visibility"), data.get("wind_speed"), data.get("wind_deg"), data.get("weather")[0].get("main"), data.get("weather")[0].get("description"))
+    return (station_number, now, datetime.datetime.fromtimestamp(data.get("dt")), data.get("temp"), data.get("feels_like"), data.get("pressure"), data.get("c"), data.get("visibility"), data.get("wind_speed"), data.get("wind_deg"), data.get("weather")[0].get("main"), data.get("weather")[0].get("description"))
 
 
 def loop_through_stations(text):
@@ -120,11 +124,11 @@ def loop_through_stations(text):
         current_weather(r.text, station_number)
         # if the script has ran 6 times, do hourly forecast
         # this occurs every half an hour
-        if forecast_count >= 6:
+        if forecast_count >= forecast_max:
             hour_weather(r.text, station_number)
 
     # need to check outside of for loop so whole loop runs
-    if forecast_count >= 6:
+    if forecast_count >= forecast_max:
         forecast_count = 0 # reset to 0
 
 def current_weather(text, station_number):
@@ -165,10 +169,9 @@ def main():
     # run create tables once
     #create_tables()
     #print(os.path)
-
+    stations = get_dublin_bikes_stations().text
     while True:
         try:
-            stations = get_dublin_bikes_stations().text
             loop_through_stations(stations)
             forecast_count += 1
             time.sleep(5 * 60)
