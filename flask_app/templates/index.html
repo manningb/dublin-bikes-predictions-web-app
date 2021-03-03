@@ -8,7 +8,7 @@
       let map;
 
       function initMap() {
-          fetch("/output.json").then(response => {
+          fetch("/static_bikes").then(response => {
               return response.json();
           }).then(data => {
               console.log("data: ", data);

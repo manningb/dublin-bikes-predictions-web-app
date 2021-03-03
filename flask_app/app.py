@@ -9,23 +9,14 @@ import json
 app = Flask("__name__", template_folder="templates")
 
 @app.route("/")
-def hello():
+def index():
     GMAP_API = ""
     return render_template("index.html", GMAP_API=GMAP_API)
 
-@app.route("/about")
-def about():
-    GMAP_API = os.environ.get("GMAP_API")
-    return GMAP_API
-
-@app.route("/contact")
-def contact():
-    return render_template("contact.html", title="Contact", heading="Contact Page")
-
-@app.route("/output.json")
-def output():
+@app.route("/static_bikes")
+def static_bikes():
     SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
-    json_url = os.path.join(app.static_folder, "output.json")
+    json_url = os.path.join(app.static_folder, "static_bikes.json")
     print(json_url)
     with open(json_url, 'r') as f:
         return jsonify(json.load(f))
