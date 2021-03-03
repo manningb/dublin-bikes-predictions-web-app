@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+      <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css">
+    <script>
+      let map;
+
+      function initMap() {
+          fetch("/stations").then(response => {
+              return response.json();
+          }).then(data => {
+
+              console.log("data: ", data['station']);
+                const myLatLng = { lat: 53.3531, lng: -6.2580 };
+  const map = new google.maps.Map(document.getElementById("map"), {
+    zoom: 13,
+    center: myLatLng,
+  });
+    data['station'].forEach(station => {
+        console.log(station);
+          const infowindow = new google.maps.InfoWindow({
+    content: '<h1>' +station.address + '</h1>'+'<p>Available Bikes: ' +station.available_bikes + '</p>' + '<p>Available Bike Stands: ' +station.available_bike_stands + '</p>',
+  });
+
+    const marker =  new google.maps.Marker({
+    position: {lat : station.position_lat, lng: station.position_lng},
+    map,
+    title: "Hello World!",
+  });
+
+  marker.addListener("click", () => {
+    infowindow.open(map, marker);
+  });
+  function infoCallback(content, marker) {
+  return function() {
+    infowindow.setContent(content);
+    infowindow.open(map, marker);
+  };
+}
+
+
+    });
+      })
+      }
+    </script>
+  </head>
+  <body>
+    <div id="map"></div>
+
+    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key={{ GMAP_API }}&callback=initMap&libraries=&v=weekly"
+      async
+    ></script>
+  </body>
+</html>
