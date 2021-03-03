@@ -13,7 +13,7 @@ def index():
     GMAP_API = ""
     return render_template("index.html", GMAP_API=GMAP_API)
 
-@app.route("/static_bikes")
+@app.route("/stations")
 def static_bikes():
     """
     Get all stations
