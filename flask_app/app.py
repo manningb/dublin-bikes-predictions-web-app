@@ -15,11 +15,27 @@ def index():
 
 @app.route("/static_bikes")
 def static_bikes():
-    SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
-    json_url = os.path.join(app.static_folder, "static_bikes.json")
-    print(json_url)
-    with open(json_url, 'r') as f:
-        return jsonify(json.load(f))
+    """
+    Get all stations
+    render template to client
+    """
+    DB_USER = os.environ.get("DB_USER")
+    DB_PASS = os.environ.get("DB_PASS")
+    DB_URL = os.environ.get("DB_URL")
+
+    engine = create_engine("mysql+pymysql://{0}:{1}@{2}".format(DB_USER, DB_PASS, DB_URL), echo=True) 
+    connection = engine.connect()
+
+    sql_create_schema = """SELECT * FROM `dublin_bikes`.`station`;""" # create select statement for stations table
+
+    rows = engine.execute(sql_create_schema) # execute select statement
+
+    stations = [] 
+    for row in rows:
+        stations.append(dict(row)) # inset dict of data into list
+    return jsonify(station=stations) # return json string of data
+
+
 
 if __name__ == "__main__":
     #default port is 5000 if you don't specify
