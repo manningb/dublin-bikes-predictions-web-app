@@ -8,23 +8,24 @@
       let map;
 
       function initMap() {
-          fetch("/static_bikes").then(response => {
+          fetch("/stations").then(response => {
               return response.json();
           }).then(data => {
-              console.log("data: ", data);
+
+              console.log("data: ", data['station']);
                 const myLatLng = { lat: 53.3531, lng: -6.2580 };
   const map = new google.maps.Map(document.getElementById("map"), {
     zoom: 13,
     center: myLatLng,
   });
-    data.forEach(station => {
+    data['station'].forEach(station => {
         console.log(station);
           const infowindow = new google.maps.InfoWindow({
     content: '<h1>' +station.address + '</h1>'+'<p>Available Bikes: ' +station.available_bikes + '</p>' + '<p>Available Bike Stands: ' +station.available_bike_stands + '</p>',
   });
 
     const marker =  new google.maps.Marker({
-    position: {lat : station.position.lat, lng: station.position.lng},
+    position: {lat : station.position_lat, lng: station.position_lng},
     map,
     title: "Hello World!",
   });
