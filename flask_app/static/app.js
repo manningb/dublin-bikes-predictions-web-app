@@ -95,13 +95,13 @@ function initMap() {
                 searchBox.setBounds(bounds);
             });
 
-            const current_marker = new google.maps.Marker({position: {lat: 53.3531, lng: -6.2580}, map});
+            const current_marker = new google.maps.Marker({position: {lat: 53.3531, lng: -6.2580}, icon:"http://maps.google.com/mapfiles/ms/icons/blue-dot.png", map});
             trackLocation({
                 onSuccess: ({coords: {latitude: lat, longitude: lng}}) => {
                     current_marker.setPosition({lat, lng});
                     map.panTo({lat, lng});
                     // Print out the user's location.
-                    $info.textContent = `Lat: ${lat} Lng: ${lng}`;
+                    $info.textContent = `Current Location Found! Lat: ${lat} Lng: ${lng}`;
                     // Don't forget to remove any error class name.
                     $info.classList.remove('error');
                     $info.classList.add('success');
