@@ -78,6 +78,7 @@ def loop_through_stations():
     loop_through_2020_by_week(station_lng, station_lat, start_week=0, end_week=52)
 
 def loop_through_2020_by_week(station_lng, station_lat, start_week, end_week):
+
     """
     Loops through all dates in 2020 by week as this is max api request
     """
@@ -87,16 +88,16 @@ def loop_through_2020_by_week(station_lng, station_lat, start_week, end_week):
 
     start_date = 1585138591 + (start_week * one_week)
     print(start_date)
-
     end_date = start_date + one_week
-    for i in range(52):
+    for i in range(start_week, end_week):
         #payload = {'start_dat': start_date, 'key2': 'value2'}
         REQUEST = f"http://history.openweathermap.org/data/2.5/history/city?lat={station_lat}&lon={station_lng}&type=hour&start={start_date}&end={end_date}&appid={WEATHERKEY}"
         #print(REQUEST)
         r = requests.get(REQUEST)
         start_date = end_date
         end_date += one_week
-        #print(r.text)
+        print(r.text)
+        print(REQUEST)
         data = json.loads(r.text)
         days = data.get("list")
         for day in days:
@@ -116,11 +117,13 @@ def get_dublin_bikes_stations():
 
 def main():
     # run create tables once
-    create_tables()
+    #create_tables()
     #print(os.path)
+
     try:
         #stations = get_dublin_bikes_stations().text
         loop_through_stations()
+
         time.sleep(5 * 60)
     except:
         print(traceback.format_exc())
