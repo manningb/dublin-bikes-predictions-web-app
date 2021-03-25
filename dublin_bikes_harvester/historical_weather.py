@@ -84,25 +84,26 @@ def loop_through_stations(text):
         station_number = station.get("number")
         station_lng = station.get("position").get("lng")
         station_lat = station.get("position").get("lat")
-        loop_through_2020_by_week(station_number, station_lng, station_lat)
+        loop_through_2020_by_week(station_number, station_lng, station_lat, start_week=0, end_week=2)
 
-def loop_through_2020_by_week(station_number, station_lng, station_lat):
+def loop_through_2020_by_week(station_number, station_lng, station_lat, start_week, end_week):
     """
     Loops through all dates in 2020 by week as this is max api request
     """
     one_week = 604800 # one week in UTC
     # initialise the very start start of the script
     # this time represents 01/01/2020 00:00:00
-    start_date = 1583020800
+    start_date = 1584385856 + (start_week * one_week)
     end_date = start_date + one_week
-    for i in range(52):
+    for i in range(start_week, end_week):
         #payload = {'start_dat': start_date, 'key2': 'value2'}
         REQUEST = f"http://history.openweathermap.org/data/2.5/history/city?lat={station_lat}&lon={station_lng}&type=hour&start={start_date}&end={end_date}&appid={WEATHERKEY}"
         #print(REQUEST)
         r = requests.get(REQUEST)
         start_date = end_date
         end_date += one_week
-        #print(r.text)
+        print(r.text)
+        print(REQUEST)
         data = json.loads(r.text)
         days = data.get("list")
         for day in days:
@@ -122,20 +123,19 @@ def get_dublin_bikes_stations():
 
 def main():
     # run create tables once
-    create_tables()
+    #create_tables()
     #print(os.path)
 
-    while True:
-        try:
-            stations = get_dublin_bikes_stations().text
-            loop_through_stations(stations)
-            time.sleep(5 * 60)
-        except:
-            print(traceback.format_exc())
-            print("Error found an error when querying")
-            time.sleep(5 * 60)
-            # if engine is None:
-            # pass
+    try:
+        stations = get_dublin_bikes_stations().text
+        loop_through_stations(stations)
+        time.sleep(5 * 60)
+    except:
+        print(traceback.format_exc())
+        print("Error found an error when querying")
+        time.sleep(5 * 60)
+        # if engine is None:
+        # pass
 
 if __name__ == "__main__":
     main()
