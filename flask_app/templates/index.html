@@ -26,7 +26,8 @@
 
     <title>Dublin Bikes</title>
     {#    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>#}
-    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='css/weather-icons.min.css') }}" rel="stylesheet" type="text/css">
 
 </head>
 
@@ -65,6 +66,10 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
+
+<div class="alert alert-info" id="weatherScroll">
+    <i class="wi " id="weatherIcon"></i>
+</div>
 
 <div class="col-md-9">
     <div id="map"></div>
