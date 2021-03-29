@@ -5,6 +5,39 @@ const myLatLng = {lat: 53.3531, lng: -6.2580};
 const $info = document.getElementById('info');
 
 
+window.onload = function () {
+    fetch("/current_weather").then(response => {
+        return response.json();
+    }).then(data => {
+        var weather_icon_map = {
+            "Clouds": "cloudy",
+            "Fog": "fog",
+            "Mist": "rain-mix",
+            "Clear": "sunny",
+            "Rain": "rain",
+            "Drizzle": "sprinkle",
+            "Thunderstorm": "thunderstorm",
+            "Snow": "snow",
+        };
+        var d = new Date()
+        var hour = d.getHours();
+        var time;
+        if (hour >= 7 && hour <= 20) {
+            time = "day";
+        } else {
+            time = "night"
+            weather_icon_map["Clear"] = "clear";
+        }
+        weather_class = "wi-" + time + "-" + weather_icon_map[data['weather'][0].weather_main]
+        weatherIconElement = document.getElementById("weatherIcon")
+        weatherIconElement.classList.add(weather_class);
+        document.getElementById('weatherScroll').innerHTML += data['weather'][0].weather_main + ", " + data['weather'][0].weather_description + ", Temp: " + data['weather'][0].temp + ", Feels Like: " + data['weather'][0].feels_like;
+
+
+    })
+};
+
+
 const trackLocation = ({
                            onSuccess, onError = () => {
     }
@@ -39,7 +72,7 @@ function initMap() {
         return response.json();
     }).then(data => {
 
-            console.log("data: ", data['station']);
+            // console.log("data: ", data['station']);
             map = new google.maps.Map(document.getElementById("map"), {
                 zoom: 15,
                 center: myLatLng,
@@ -95,7 +128,11 @@ function initMap() {
                 searchBox.setBounds(bounds);
             });
 
-            const current_marker = new google.maps.Marker({position: {lat: 53.3531, lng: -6.2580}, icon:"http://maps.google.com/mapfiles/ms/icons/blue-dot.png", map});
+            const current_marker = new google.maps.Marker({
+                position: {lat: 53.3531, lng: -6.2580},
+                icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+                map
+            });
             trackLocation({
                 onSuccess: ({coords: {latitude: lat, longitude: lng}}) => {
                     current_marker.setPosition({lat, lng});
@@ -116,10 +153,9 @@ function initMap() {
             });
             var count = 0;
             data['station'].forEach(station => {
-                console.log(station);
-                console.log(station.weather_main);
+                // console.log(station);
                 const infowindow = new google.maps.InfoWindow({
-                    content: '<h1>' + station.address + '</h1>' + '<p>Available Bikes: ' + station.available_bikes + '</p>' + '<p>Available Bike Stands: ' + station.available_bike_stands + '</p><p>' + station.weather_main + '</p><p>' + station.last_update + '</p>',
+                    content: '<h1>' + station.address + '</h1>' + '<p>Available Bikes: ' + station.available_bikes + '</p>' + '<p>Available Bike Stands: ' + station.available_bike_stands + '</p><p>' + station.last_update + '</p>',
                 });
 
                 const marker = new google.maps.Marker({
@@ -148,7 +184,6 @@ function initMap() {
                     '+</small>\n' +
                     '                </div>\n' +
                     '                <p class="mb-1">Available Bikes:' + station.available_bikes + '</p>\n' +
-                    '                <small>' + station.weather_main + '</small>\n' +
                     '            </a>'
                 )
                 ;
