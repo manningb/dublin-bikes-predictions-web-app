@@ -2,6 +2,8 @@ var map, activeInfoWindow;
 var markers = [];
 var search_markers = [];
 const myLatLng = {lat: 53.3531, lng: -6.2580};
+const $info = document.getElementById('info');
+
 
 const trackLocation = ({
                            onSuccess, onError = () => {
@@ -15,8 +17,6 @@ const trackLocation = ({
         maximumAge: 0
     });
 };
-
-
 const getPositionErrorMessage = code => {
     switch (code) {
         case 1:
@@ -46,7 +46,7 @@ function initMap() {
             });
             var searchBox = new google.maps.places.SearchBox(
                 (document.getElementById('searchBox')));
-            $("#searchBox").submit(function(e){
+            $("#searchBox").submit(function (e) {
                 e.preventDefault();
             });
 
@@ -95,16 +95,25 @@ function initMap() {
                 searchBox.setBounds(bounds);
             });
 
-            const current_marker = new google.maps.Marker({position: {lat: 53.3531, lng: -6.2580}, map});
+            const current_marker = new google.maps.Marker({position: {lat: 53.3531, lng: -6.2580}, icon:"http://maps.google.com/mapfiles/ms/icons/blue-dot.png", map});
             trackLocation({
                 onSuccess: ({coords: {latitude: lat, longitude: lng}}) => {
                     current_marker.setPosition({lat, lng});
                     map.panTo({lat, lng});
+                    // Print out the user's location.
+                    $info.textContent = `Current Location Found! Lat: ${lat} Lng: ${lng}`;
+                    // Don't forget to remove any error class name.
+                    $info.classList.remove('error');
+                    $info.classList.add('success');
                 },
-                onError: err =>
-                    alert(`Error: ${getPositionErrorMessage(err.code) || err.message}`)
+                onError: err => {
+                    // Print out the error message.
+                    $info.textContent = `Error: ${getPositionErrorMessage(err.code) || err.message}`;
+                    // Add error class name.
+                    $info.classList.add('error');
+                    $info.classList.remove('success');
+                }
             });
-
             var count = 0;
             data['station'].forEach(station => {
                 console.log(station);
