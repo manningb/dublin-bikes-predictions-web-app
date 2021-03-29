@@ -7,7 +7,7 @@ import os
 import requests
 import time
 import json
-
+import pytz
 # secrets.py file where i store sensitive info
 # import my_secrets
 
@@ -93,8 +93,10 @@ def get_data(data, station_number):
     """
     this function takes in the data and station number as input and returns a tuple with that data
     """
-    now = datetime.datetime.utcnow()
-    return (station_number, now, datetime.datetime.fromtimestamp(data.get("dt")), data.get("temp"), data.get("feels_like"), data.get("pressure"), data.get("c"), data.get("visibility"), data.get("wind_speed"), data.get("wind_deg"), data.get("weather")[0].get("main"), data.get("weather")[0].get("description"))
+    # set time zone
+    tz = pytz.timezone('Europe/Dublin')
+    now = datetime.datetime.now(tz=tz)
+    return (station_number, now, datetime.datetime.fromtimestamp(data.get("dt")).astimezone(tz), data.get("temp"), data.get("feels_like"), data.get("pressure"), data.get("c"), data.get("visibility"), data.get("wind_speed"), data.get("wind_deg"), data.get("weather")[0].get("main"), data.get("weather")[0].get("description"))
 
 
 def loop_through_stations(text):
@@ -119,7 +121,8 @@ def loop_through_stations(text):
 
         #print out the time
         # to be used in the debug logs
-        now = datetime.datetime.now()
+        tz = pytz.timezone('Europe/Dublin')
+        now = datetime.datetime.now(tz=tz)
         print(r, now)
         current_weather(r.text, station_number)
         # if the script has ran 6 times, do hourly forecast
