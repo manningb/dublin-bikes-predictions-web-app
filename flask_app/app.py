@@ -1,19 +1,25 @@
+import os
+import datetime
+
 from flask import Flask, render_template, jsonify
-import json
-import os
 from sqlalchemy import create_engine
-import os
-import requests
-import json
-from math import cos, sqrt
-import geopy.distance
 
 app = Flask("__name__", template_folder="templates")
+
+global last_updated_availability_time, last_updated_weather_time
+last_updated_availability_time = datetime.datetime.now()
+last_updated_weather_time = datetime.datetime.now()
+global last_updated_availability_data, last_updated_weather_data
+global first_run_availability, first_run_weather
+first_run = True
+first_run_weather = True
+
 
 @app.route("/")
 def index():
     GMAP_API = "AIzaSyDX7gu_rKXux6P20MBh1ThL3FfOKoGH64Q"
     return render_template("index.html", GMAP_API=GMAP_API)
+
 
 def sql_query(query):
     DB_USER = os.environ.get("DB_USER")
@@ -26,26 +32,32 @@ def sql_query(query):
     rows = engine.execute(query)
     return rows
 
+
 @app.route("/stations")
 def static_bikes():
     """
     Get all stations
     render template to client
     """
-    sql_get_availability = """select db_a.number, position_lat, position_lng, name, address, available_bikes, available_bike_stands, max(db_a.last_update) as last_update
-FROM dublin_bikes.station db_s
-INNER JOIN dublin_bikes.availability db_a ON
-db_s.number = db_a.number
-GROUP BY number
-"""  # create select statement for stations table
+    global last_updated_availability_time, last_updated_availability_data, first_run
+    if ((last_updated_availability_time - datetime.datetime.now()).total_seconds() > 900 or first_run == True):
+        first_run = False
+        sql_get_availability = """select db_a.number, position_lat, position_lng, name, address, available_bikes, available_bike_stands, max(db_a.last_update) as last_update
+    FROM dublin_bikes.station db_s
+    INNER JOIN dublin_bikes.availability db_a ON
+    db_s.number = db_a.number
+    GROUP BY number
+    """  # create select statement for stations table
 
-    rows = sql_query(sql_get_availability)  # execute select statement
+        rows = sql_query(sql_get_availability)  # execute select statement
 
-    stations = []
-    for row in rows:
-        stations.append(dict(row))  # inset dict of data into list
-        print(row)
-    return jsonify(station=stations)  # return json string of data
+        last_updated_availability_data = []
+        for row in rows:
+            last_updated_availability_data.append(dict(row))  # inset dict of data into list
+            print(row)
+    last_updated_availability_time = datetime.datetime.now()
+    return jsonify(station=last_updated_availability_data)  # return json string of data
+
 
 @app.route("/current_weather")
 def current_weather():
@@ -53,54 +65,22 @@ def current_weather():
     Get all stations
     render template to client
     """
-    sql_get_weather = """SELECT *
-    FROM dublin_bikes.weather_current 
-    ORDER  BY last_update DESC
-    LIMIT  1;
-        """
+    global last_updated_weather_time, last_updated_weather_data, first_run_weather
+    if ((last_updated_weather_time - datetime.datetime.now()).total_seconds() > 900 or first_run_weather == True):
+        first_run_weather = False
+        sql_get_weather = """SELECT *
+        FROM dublin_bikes.weather_current 
+        ORDER  BY last_update DESC
+        LIMIT  1;
+            """
 
-    rows = sql_query(sql_get_weather)
-    weather = []
-    for row in rows:
-        weather.append(dict(row))  # inset dict of data into list
-        print(row)
-    return jsonify(weather=weather)  # return json string of data
-
-
-@app.route("/find_now/lat=<lat>&lng=<lng>/<bike_or_station>")
-def find_now(lat, lng, bike_or_station):
-    """
-Find bike or station near location now
-    """
-    sql_get_closest = """select db_a.number, position_lat, position_lng, name, address, available_bikes, available_bike_stands, max(db_a.last_update) as last_update
-FROM dublin_bikes.station db_s
-INNER JOIN dublin_bikes.availability db_a ON
-db_s.number = db_a.number
-GROUP BY number
-"""  # create select statement for stations table
-    rows = sql_query(sql_get_closest)  # execute select statement
-
-    stations = []
-    for row in rows:
-        stations.append(dict(row))  # inset dict of data into list
-        print(row)
-
-    sorted_stations = sorted(stations, key=lambda d: distance(d["position_lng"], d["position_lat"], lat, lng))
-    #
-    # print(sorted_stations[5])
-    for i in sorted_stations:
-        print(i)
-    print(lat, lng)
-    return jsonify(sorted_stations=sorted_stations[0])  # return json string of data
-
-
-
-
-def distance(lon1, lat1, lon2, lat2):
-    arguments = (lon1, lat1, lon2, lat2)
-    lon1, lat1, lon2, lat2 = map(float, arguments)
-    distance = geopy.distance.vincenty((lat1, lon1), (lat2, lon2)).km
-    return distance
+        rows = sql_query(sql_get_weather)
+        last_updated_weather_data = []
+        for row in rows:
+            last_updated_weather_data.append(dict(row))  # inset dict of data into list
+            print(row)
+    last_updated_weather_time = datetime.datetime.now()
+    return jsonify(weather=last_updated_weather_data)  # return json string of data
 
 
 if __name__ == "__main__":

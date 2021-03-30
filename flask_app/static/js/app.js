@@ -17,13 +17,6 @@ function msToBeaufort(ms) {
     return Math.ceil(Math.cbrt(Math.pow(ms / 0.836, 2)));
 }
 
-function fToC(fahrenheit) {
-    var fTemp = fahrenheit;
-    var fToCel = (fTemp - 32) * 5 / 9;
-    return Math.round(fToCel);
-}
-
-
 window.onload = function () {
     fetch("/current_weather").then(response => {
         return response.json();
@@ -64,13 +57,12 @@ window.onload = function () {
 
         weatherIconElement.classList.add(weather_class);
         timeIconElement.classList.add("wi-time-" + hour12);
-        temp_celsius = (parseFloat(data['weather'][0].temp)-273.15).toFixed(2);
-        feelslike_celsius = (parseFloat(data['weather'][0].feels_like)-273.15).toFixed(2);
+        temp_celsius = (parseFloat(data['weather'][0].temp) - 273.15).toFixed(2);
+        feelslike_celsius = (parseFloat(data['weather'][0].feels_like) - 273.15).toFixed(2);
 
         document.getElementById('weatherDescText').innerHTML += data['weather'][0].weather_main + ", " + data['weather'][0].weather_description + tab;
         document.getElementById('timeText').innerHTML += date + tab;
         document.getElementById('tempText').innerHTML += "Temp: " + temp_celsius + "°C, Feels Like: " + feelslike_celsius + "°C" + tab;
-        ;
         document.getElementById('windText').innerHTML += "Wind Speed: " + data['weather'][0].wind_speed + "m/s" + tab;
         document.getElementById('windDegText').innerHTML += "Wind Degrees: " + data['weather'][0].wind_deg + "°" + tab;
 
@@ -132,22 +124,23 @@ function initMap() {
             map = new google.maps.Map(document.getElementById("map"), mapOptions);
             var searchBox = new google.maps.places.SearchBox(
                 (document.getElementById('searchBox')));
-            $("#searchBox").submit(function (e) {
-                e.preventDefault();
+
+            $("#searchBox").on('keypress', function (e) {
+                // prevent form submission on pressing Enter as there could be more inputs to fill out
+                if (e.which == 13) {
+                    e.preventDefault();
+                }
             });
+
             directionsDisplay = new google.maps.DirectionsRenderer({
                 draggable: true,
-          map,
-          panel: document.getElementById("overlayContent")});
+                map,
+                panel: document.getElementById("overlayContent")
+            });
             // Listen for the event fired when the user selects an item from the
             // pick list. Retrieve the matching places for that item.
             google.maps.event.addListener(searchBox, 'places_changed', function () {
                 var places = searchBox.getPlaces();
-
-                for (var i = 0, marker; marker = search_markers[i]; i++) {
-                    marker.setMap(null);
-                }
-
                 // For each place, get the icon, place name, and location.
                 search_markers = [];
                 var bounds = new google.maps.LatLngBounds();
@@ -268,7 +261,7 @@ function findNow(bike_or_station) {
     myClick(num);
     console.log(stations[num][0]);
     calcRoute(myLatLng, [stations[num][0], stations[num][1]]);
-};
+}
 
 function distance_func(lat1, lon1, lat2, lon2) {
     var p = 0.017453292519943295;    // Math.PI / 180
@@ -278,7 +271,7 @@ function distance_func(lat1, lon1, lat2, lon2) {
         (1 - c((lon2 - lon1) * p)) / 2;
 
     return 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
-};
+}
 
 function calcDist(bike_or_station) {
     dist = {};
@@ -306,7 +299,6 @@ function calcDist(bike_or_station) {
 
     }
 }
-;
 
 
 function sort_object(dict) {
@@ -323,7 +315,7 @@ function sort_object(dict) {
     items.reverse();
 // Create a new array with only the first 5 items
     return items.slice(0, 5);
-};
+}
 
 function offsetMap() {
 
