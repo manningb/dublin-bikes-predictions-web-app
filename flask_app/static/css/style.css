@@ -1,8 +1,8 @@
 /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
-#map {
-    height: 100%;
-}
+/*#map {*/
+/*    height: 100%;*/
+/*}*/
 
 html, body {
     margin: 0;
@@ -98,14 +98,14 @@ nav a {
     position: absolute;
     width: 200px;
     height: 450px;
-    background: black;
+    background: white;
     opacity: 0.8;
     top: 0;
     left: 0;
     overflow: auto;
 }
 #overlayContent {
-    color: white;
+    color: black;
     padding: 10px 20px;
 }
 #overlayContent p {

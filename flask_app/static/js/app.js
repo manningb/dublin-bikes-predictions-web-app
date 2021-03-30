@@ -109,6 +109,10 @@ function initMap() {
     fetch("/stations").then(response => {
         return response.json();
     }).then(data => {
+
+
+            directionsService = new google.maps.DirectionsService();
+
             // console.log("data: ", data['station']);
             var mapOptions = {
                 zoom: 15,
@@ -128,7 +132,10 @@ function initMap() {
             $("#searchBox").submit(function (e) {
                 e.preventDefault();
             });
-
+            directionsDisplay = new google.maps.DirectionsRenderer({
+                draggable: true,
+          map,
+          panel: document.getElementById("overlayContent")});
             // Listen for the event fired when the user selects an item from the
             // pick list. Retrieve the matching places for that item.
             google.maps.event.addListener(searchBox, 'places_changed', function () {
@@ -249,15 +256,8 @@ function initMap() {
         const autocomplete = new google.maps.places.Autocomplete(searchBox, options);
         autocomplete.bindTo("bounds", map);
     */
-    directionsDisplay = new google.maps.DirectionsRenderer({
-        draggable: true,
-        'map': map,
-        'preserveViewport': true,
-    });
 
-    directionsService = new google.maps.DirectionsService();
-
-    directionsDisplay.setMap(map);
+    //directionsDisplay.setMap(map);
 }
 
 function findNow(bike_or_station) {
@@ -407,7 +407,6 @@ function calcRoute(start, end) {
             routeBounds = response.routes[0].bounds;
 
             // Write directions steps
-            writeDirectionsSteps(response.routes[0].legs[0].steps);
 
             // Wait for map to be idle before calling offsetMap function
             google.maps.event.addListener(map, 'idle', function () {
@@ -429,22 +428,10 @@ function calcRoute(start, end) {
                 map.fitBounds(routeBounds);
 
                 // Write directions steps
-                writeDirectionsSteps(updatedResponse.routes[0].legs[0].steps);
 
                 // Offset map
                 offsetMap();
             });
         }
     });
-}
-
-function writeDirectionsSteps(steps) {
-
-    var overlayContent = document.getElementById("overlayContent");
-    overlayContent.innerHTML = '';
-
-    for (var i = 0; i < steps.length; i++) {
-
-        overlayContent.innerHTML += '<p>' + steps[i].instructions + '</p><small>' + steps[i].distance.text + '</small>';
-    }
 }
