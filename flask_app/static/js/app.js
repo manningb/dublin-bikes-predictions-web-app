@@ -64,9 +64,12 @@ window.onload = function () {
 
         weatherIconElement.classList.add(weather_class);
         timeIconElement.classList.add("wi-time-" + hour12);
+        temp_celsius = (parseFloat(data['weather'][0].temp)-273.15).toFixed(2);
+        feelslike_celsius = (parseFloat(data['weather'][0].feels_like)-273.15).toFixed(2);
+
         document.getElementById('weatherDescText').innerHTML += data['weather'][0].weather_main + ", " + data['weather'][0].weather_description + tab;
         document.getElementById('timeText').innerHTML += date + tab;
-        document.getElementById('tempText').innerHTML += "Temp: " + fToC(data['weather'][0].temp) + "°C, Feels Like: " + fToC(data['weather'][0].feels_like) + "°C" + tab;
+        document.getElementById('tempText').innerHTML += "Temp: " + temp_celsius + "°C, Feels Like: " + feelslike_celsius + "°C" + tab;
         ;
         document.getElementById('windText').innerHTML += "Wind Speed: " + data['weather'][0].wind_speed + "m/s" + tab;
         document.getElementById('windDegText').innerHTML += "Wind Degrees: " + data['weather'][0].wind_deg + "°" + tab;
