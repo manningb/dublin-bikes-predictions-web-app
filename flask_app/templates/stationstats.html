@@ -26,7 +26,7 @@
     <meta name="author" content="">
 
     <title>Dublin Bikes</title>
-    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" type="text/css">
 
 
     <!-- google charts-->
@@ -69,21 +69,28 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
+<h2 id="stationname">**Dame Street**</h2>
+<div id="status"></div>
 
-<div class="col-md-9">
-    <h2 id="stationname">**Dame Street**</h2>
-    <div id="status"></div>
-    <div id="curve_chart" style="width: 900px; height: 500px"></div>
-    <div id="48hour" style="width: 900px; height: 500px"></div>
-    <div id="donutchart" style="width: 900px; height: 500px;"></div>
-    <div id="calendar_basic" style="width: 1000px; height: 350px;"></div>
-    <div id="calendar_basic_stations" style="width: 1000px; height: 350px;"></div>
-    
+<div class="centreholder">
+    <div class="mycentre" id="donutchart"></div>
 </div>
-<div class="col-md-3">
-    
-</div>
-</div>
+
+
+<div class="container">
+    <div class="row">
+      <div class="col-md-6"><div class="split" id="curve_chart"></div></div>
+      <div class="col-md-6"><div class="split" id="48hour"></div>    </div>
+    </div>
+  </div>
+
+
+<div class="centreholder">
+<div class="mycentre" id="calendar_basic" ></div>
+<div class="mycentre" id="calendar_basic_stations"></div></div>
+  </div>
+
+
     <script>var number = "{{NUMBER}}"</script>
     <script src="static/stationstats.js"></script>
 </body>

@@ -54,3 +54,27 @@ h2 {
     color: #000;
     background: #c5e8c5;
 }
+
+.calander {
+float: clear;
+width: 100%;
+}
+
+.split{
+  width: 100%;
+  height: 50%;
+}
+
+.centreholder{
+width: 100%;
+height: 50%;
+margin-top: 10px;
+margin-bottom: 10px;
+}
+
+.mycentre {
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+  height: 100%;
+}

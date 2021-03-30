@@ -62,6 +62,8 @@ def hour48(number):
     dictionary = dict(zip(df_final_future["last_update"].astype(str).to_list(), result.tolist()))
     return jsonify(dictionary)
 
+
+
 @app.route("/statstation-<int:number>")
 def statstation(number):
     DB_USER = os.environ.get("DB_USER")
@@ -73,8 +75,7 @@ def statstation(number):
 
     sql_create_schema = f"""SELECT * FROM dublin_bikes.availability
 where number = {number}
-order by time_queried desc
-limit 500;"""
+order by time_queried asc;"""
     rows = engine.execute(sql_create_schema)  # execute select statement
 
     stations = []

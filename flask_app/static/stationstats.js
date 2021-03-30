@@ -24,9 +24,10 @@ function fetch48(number) {
     });
 }
 
-fetch48(number);
 
 fetchAverage(number);
+fetch48(number);
+
 function fetchAverage(number) {
   fetch("/averagestation-" + number)
     .then((response) => {
@@ -74,8 +75,8 @@ function fetchStation(number) {
         ]);
       });
       graphdata.addRows(availbleRows);
-      google.charts.setOnLoadCallback(drawChart(graphdata));
       google.charts.setOnLoadCallback(drawPieChart(pieData));
+      google.charts.setOnLoadCallback(drawChart(graphdata));
     });
 }
 fetchStation(number);
