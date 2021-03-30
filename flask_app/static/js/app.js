@@ -11,6 +11,21 @@ var overlayWidth = 200; // Width of the overlay DIV
 var leftMargin = 30; // Grace margin to avoid too close fits on the edge of the overlay
 var rightMargin = 80; // Grace margin to avoid too close fits on the right and leave space for the controls
 
+document.onreadystatechange = function () {
+  var state = document.readyState
+  if (state == 'interactive') {
+       document.getElementById('contents').style.visibility="hidden";
+  } else if (state == 'complete') {
+      setTimeout(function(){
+         document.getElementById('interactive');
+         document.getElementById('load').style.visibility="hidden";
+         document.getElementById('contents').style.visibility="visible";
+      },1000);
+  }
+}
+
+
+
 overlayWidth += leftMargin;
 
 function msToBeaufort(ms) {
