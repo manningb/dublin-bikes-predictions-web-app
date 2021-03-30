@@ -28,6 +28,29 @@
     {#    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>#}
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ url_for('static', filename='css/weather-icons.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='css/weather-icons-wind.min.css') }}" rel="stylesheet" type="text/css">
+
+<script type="text/javascript">
+$(document).ready(function(){
+    var speed = 5;
+    var items, scroller = $('#scroller');
+    var width = 0;
+    scroller.children().each(function(){
+        width += $(this).outerWidth(true);
+    });
+    scroller.css('width', width);
+    scroll();
+    function scroll(){
+        items = scroller.children();
+        var scrollWidth = items.eq(0).outerWidth();
+        scroller.animate({'left' : 0 - scrollWidth}, scrollWidth * 100 / speed, 'linear', changeFirst);
+    }
+    function changeFirst(){
+        scroller.append(items.eq(0).remove()).css('left', 0);
+        scroll();
+    }
+});
+</script>
 
 </head>
 
@@ -66,11 +89,20 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
-
-<div class="alert alert-info" id="weatherScroll">
-    <i class="wi " id="weatherIcon"></i>
+<div class=" ticker-wrap">
+  <div class="ticker" id="weatherScroll">
+                <i class="ticker-item wi " id="weatherIcon"></i>
+                <p class="ticker-item" id="weatherDescText"></p>
+                <i class="ticker-item wi " id="timeIcon"></i>
+                <p class="ticker-item" id="timeText"></p>
+                <i class="ticker-item wi wi-thermometer" id="tempIcon"></i>
+                <p class="ticker-item" id="tempText"></p>
+                <i class="ticker-item wi " id="windSpeedIcon"></i>
+                <p class="ticker-item" id="windText"></p>
+                <i class="ticker-item wi wi-wind " id="windDegIcon"></i>
+                <p class="ticker-item" id="windDegText"></p>
 </div>
-
+</div>
 <div class="col-md-9">
     <div id="map"></div>
     <!-- For displaying user's coordinate or error message. -->

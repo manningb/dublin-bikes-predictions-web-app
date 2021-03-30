@@ -14,6 +14,56 @@ html, body, #map {
 #weatherScroll {
     margin: 0px 3px 10px;
 }
+#weatherScroll p { display: inline }
+
+.ticker-wrap {
+    position: relative;
+    top: 0;
+    width: 100%;
+    overflow: hidden;
+    height: 4rem;
+    background-color: rgba(51, 51, 51, 0.5);
+    padding-left: 100%;
+    margin-bottom: 10px;
+}
+
+.ticker {
+    display: inline-block;
+    height: 4rem;
+    width: 150rem;
+    line-height: 4rem;
+    white-space: nowrap;
+    padding-right: 0%;
+animation-name: ticker;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-duration: 10s;
+
+}
+
+.ticker-item {
+    display: inline-block;
+    padding: 0 2rem;
+    font-size: 2rem;
+    color: white;
+}
+
+@keyframes ticker {
+    0% {
+        -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
+
+    }
+    100% {
+        -webkit-transform: translate3d(-150rem, 0, 0);
+                transform: translate3d(-150rem, 0, 0);
+
+    }
+
+
+}
+
+
 
 #map {
     width: 100%;

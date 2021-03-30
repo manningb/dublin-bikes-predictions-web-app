@@ -4,6 +4,17 @@ var search_markers = [];
 const myLatLng = {lat: 53.3531, lng: -6.2580};
 const $info = document.getElementById('info');
 
+function msToBeaufort(ms) {
+    return Math.ceil(Math.cbrt(Math.pow(ms / 0.836, 2)));
+}
+
+function fToC(fahrenheit)
+{
+  var fTemp = fahrenheit;
+  var fToCel = (fTemp - 32) * 5 / 9;
+  return Math.round(fToCel);
+}
+
 
 window.onload = function () {
     fetch("/current_weather").then(response => {
@@ -21,6 +32,8 @@ window.onload = function () {
         };
         var d = new Date()
         var hour = d.getHours();
+        var date = new Date().toLocaleString();
+        var hour12 = hour % 12;
         var time;
         if (hour >= 7 && hour <= 20) {
             time = "day";
@@ -28,10 +41,26 @@ window.onload = function () {
             time = "night"
             weather_icon_map["Clear"] = "clear";
         }
-        weather_class = "wi-" + time + "-" + weather_icon_map[data['weather'][0].weather_main]
-        weatherIconElement = document.getElementById("weatherIcon")
+        var tab = "&nbsp;&nbsp;&nbsp;&nbsp;"
+        beaufortSpeed = Math.round(msToBeaufort(data['weather'][0].wind_speed));
+        weather_class = "wi-" + time + "-" + weather_icon_map[data['weather'][0].weather_main];
+        weatherIconElement = document.getElementById("weatherIcon");
+        timeIconElement = document.getElementById("timeIcon");
+        windDegIconElement = document.getElementById("windDegIcon");
+        windSpeedIconElement = document.getElementById("windSpeedIcon");
+
+        console.log("towards-" + data['weather'][0].wind_deg + "-deg");
+        console.log(windDegIconElement)
+        windDegIconElement.classList.add("towards-" + data['weather'][0].wind_deg + "-deg");
+        windSpeedIconElement.classList.add("wi-wind-beaufort-" + beaufortSpeed);
+
         weatherIconElement.classList.add(weather_class);
-        document.getElementById('weatherScroll').innerHTML += data['weather'][0].weather_main + ", " + data['weather'][0].weather_description + ", Temp: " + data['weather'][0].temp + ", Feels Like: " + data['weather'][0].feels_like;
+        timeIconElement.classList.add("wi-time-" + hour12);
+        document.getElementById('weatherDescText').innerHTML += data['weather'][0].weather_main + ", " + data['weather'][0].weather_description + tab;
+        document.getElementById('timeText').innerHTML += date + tab;
+        document.getElementById('tempText').innerHTML += "Temp: " + fToC(data['weather'][0].temp) + "°C, Feels Like: " + fToC(data['weather'][0].feels_like) + "°C" +tab;;
+        document.getElementById('windText').innerHTML += "Wind Speed: " + data['weather'][0].wind_speed + "m/s" + tab;
+        document.getElementById('windDegText').innerHTML += "Wind Degrees: " + data['weather'][0].wind_deg + "°" + tab;
 
 
     })
