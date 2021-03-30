@@ -4,6 +4,7 @@
 <head>
 
     <!-- Jqeury -->
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <!-- Latest compiled and minified CSS -->
@@ -25,9 +26,11 @@
     <meta name="author" content="">
 
     <title>Dublin Bikes</title>
-    {#    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>#}
-    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ url_for('static', filename='css/weather-icons.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css">
+
+
+    <!-- google charts-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 </head>
 
@@ -67,60 +70,21 @@
     </div><!-- /.container-fluid -->
 </nav>
 
-<div class="alert alert-info" id="weatherScroll">
-    <i class="wi " id="weatherIcon"></i>
-</div>
-
 <div class="col-md-9">
-    <div id="map"></div>
-    <!-- For displaying user's coordinate or error message. -->
-    <div id="info" class="info"></div>
+    <h2 id="stationname">**Dame Street**</h2>
+    <div id="status"></div>
+    <div id="curve_chart" style="width: 900px; height: 500px"></div>
+    <div id="donutchart" style="width: 900px; height: 500px;"></div>
+    <div id="calendar_basic" style="width: 1000px; height: 350px;"></div>
+    <div id="calendar_basic_stations" style="width: 1000px; height: 350px;"></div>
+    
 </div>
 <div class="col-md-3">
-    <div style="max-width: 100%; max-height: 40vh; margin-bottom: 10px; overflow:scroll; -webkit-overflow-scrolling: touch; overflow-x: hidden;">
-        <div class="list-group" id="bikes_list"></div>
-    </div>
-    <form style="width: 100%; height: 40vh">
-
-
-        <div class="form-group">
-            <label for="searchBox" class="controls" type="text" placeholder="Search Box">Search Box</label>
-            <input id="searchBox" class="form-control" placeholder="O'Connell St. Dublin">
-        </div>
-        <div class="form-group">
-            <label for="exampleFormControlSelect1">Example select</label>
-            <select class="form-control" id="exampleFormControlSelect1">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="exampleFormControlSelect2">Example multiple select</label>
-            <select multiple class="form-control" id="exampleFormControlSelect2">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="exampleFormControlTextarea1">Example textarea</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-        </div>
-    </form>
+    
 </div>
 </div>
-<script src="static/app.js"></script>
-
-<script
-        src="https://maps.googleapis.com/maps/api/js?key={{ GMAP_API }}&callback=initMap&libraries=places&v=weekly"
-        async
-></script>
-
+    <script>var number = "{{NUMBER}}"</script>
+    <script src="static/stationstats.js"></script>
 </body>
 
 </html>
