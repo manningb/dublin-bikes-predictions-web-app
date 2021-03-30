@@ -7,7 +7,7 @@ import requests
 import json
 import pandas as pd
 import decimal
-
+import joblib
 app = Flask("__name__", template_folder="templates")
 
 @app.route("/")
@@ -21,6 +21,7 @@ def index():
 @app.route("/stationstats-<int:number>")
 def stationstats(number):
     return render_template("stationstats.html", NUMBER=number)
+
 def sql_query(query):
     DB_USER = os.environ.get("DB_USER")
     DB_PASS = os.environ.get("DB_PASS")
@@ -30,6 +31,38 @@ def sql_query(query):
 
     rows = engine.execute(query)
     return rows
+
+@app.route("/hour48-<int:number>")
+def hour48(number):
+    model = joblib.load('../data_analytics/station-2.pkl')
+    features = ['temp',  'humidity', 'wind_speed', 'dayquery_Friday', 'dayquery_Monday', 'dayquery_Saturday', 'dayquery_Sunday', 'dayquery_Thursday',
+ 'dayquery_Tuesday', 'dayquery_Wednesday', 'weather_main_Clear', 'weather_main_Clouds', 'weather_main_Drizzle', 'weather_main_Fog', 'weather_main_Mist', 'weather_main_Rain']
+
+    DB_USER = os.environ.get("DB_USER")
+    DB_PASS = os.environ.get("DB_PASS")
+    DB_URL = os.environ.get("DB_URL")
+
+    engine = create_engine("mysql+pymysql://{0}:{1}@{2}".format(DB_USER, DB_PASS, DB_URL), echo=True)
+    connection = engine.connect()
+
+    statement = """SELECT last_update, dayname(last_update) as dayquery, hour(last_update) as hourquery, temp, humidity, wind_speed, weather_main FROM dublin_bikes.weather_forecast_1hour
+    where station_number = 2
+    order by time_queried
+    limit 48;"""
+    df_future = pd.read_sql_query(statement, engine)
+    categorical_columns = df_future[['dayquery', 'hourquery', 'weather_main', 'dayquery', 'hourquery']].columns
+    # Convert data type to category for these columns
+    for column in categorical_columns:
+        df_future[column] = df_future[column].astype('category')
+
+    df_future["humidity"] = df_future["humidity"].fillna(0)
+    df_final_future = pd.get_dummies(df_future, drop_first=False)
+    for col in features:
+        if col not in df_final_future.columns:
+            df_final_future[col] = [0 for i in range(len(df_final_future))]
+    result = model.predict(df_final_future[features])
+    dictionary = dict(zip(df_final_future["last_update"].astype(str).to_list(), result.tolist()))
+    return jsonify(dictionary)
 
 @app.route("/statstation-<int:number>")
 def statstation(number):
