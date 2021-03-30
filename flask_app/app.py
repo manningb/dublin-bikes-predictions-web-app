@@ -15,8 +15,6 @@ def index():
     GMAP_API = "AIzaSyDX7gu_rKXux6P20MBh1ThL3FfOKoGH64Q"
     return render_template("index.html", GMAP_API=GMAP_API)
 
-    return render_template("stationstats.html", NUMBER=number)
-
 
 @app.route("/stationstats-<int:number>")
 def stationstats(number):
@@ -47,7 +45,7 @@ def hour48(number):
 
     statement = """SELECT last_update, dayname(last_update) as dayquery, hour(last_update) as hourquery, temp, humidity, wind_speed, weather_main FROM dublin_bikes.weather_forecast_1hour
     where station_number = 2
-    order by time_queried
+    order by time_queried desc, last_update
     limit 48;"""
     df_future = pd.read_sql_query(statement, engine)
     categorical_columns = df_future[['dayquery', 'hourquery', 'weather_main', 'dayquery', 'hourquery']].columns
