@@ -59,24 +59,13 @@ animation-name: ticker;
 }
 
 body {
-    background: #8fbfdb;
+    background: white;
 }
 
-.navbar {
-    background: black;
+nav {
+    background: #0092c5;
 }
 
-.info {
-    padding: 1rem;
-    margin: 0;
-}
-
-.info.error {
-    color: #000;
-    background: #fbb4ae;
-}
-
-.info.success {
-    color: #000;
-    background: #c5e8c5;
+nav a {
+    color:white;
 }
