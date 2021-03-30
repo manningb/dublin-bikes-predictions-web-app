@@ -37,7 +37,7 @@ html, body, #map {
 animation-name: ticker;
     animation-iteration-count: infinite;
     animation-timing-function: linear;
-    animation-duration: 10s;
+    animation-duration: 30s;
 
 }
 
@@ -49,21 +49,9 @@ animation-name: ticker;
 }
 
 @keyframes ticker {
-    0% {
-        -webkit-transform: translate3d(0, 0, 0);
-                transform: translate3d(0, 0, 0);
-
-    }
-    100% {
-        -webkit-transform: translate3d(-150rem, 0, 0);
-                transform: translate3d(-150rem, 0, 0);
-
-    }
-
-
+  from   { transform: translateX(0%); }
+  to { transform: translateX(-200%); }
 }
-
-
 
 #map {
     width: 100%;
