@@ -5,6 +5,8 @@ from sqlalchemy import create_engine
 import os
 import requests
 import json
+from math import cos, sqrt
+import geopy.distance
 
 app = Flask("__name__", template_folder="templates")
 
@@ -63,6 +65,43 @@ def current_weather():
         weather.append(dict(row))  # inset dict of data into list
         print(row)
     return jsonify(weather=weather)  # return json string of data
+
+
+@app.route("/find_now/lat=<lat>&lng=<lng>/<bike_or_station>")
+def find_now(lat, lng, bike_or_station):
+    """
+Find bike or station near location now
+    """
+    sql_get_closest = """select db_a.number, position_lat, position_lng, name, address, available_bikes, available_bike_stands, max(db_a.last_update) as last_update
+FROM dublin_bikes.station db_s
+INNER JOIN dublin_bikes.availability db_a ON
+db_s.number = db_a.number
+GROUP BY number
+"""  # create select statement for stations table
+    rows = sql_query(sql_get_closest)  # execute select statement
+
+    stations = []
+    for row in rows:
+        stations.append(dict(row))  # inset dict of data into list
+        print(row)
+
+    sorted_stations = sorted(stations, key=lambda d: distance(d["position_lng"], d["position_lat"], lat, lng))
+    #
+    # print(sorted_stations[5])
+    for i in sorted_stations:
+        print(i)
+    print(lat, lng)
+    return jsonify(sorted_stations=sorted_stations[0])  # return json string of data
+
+
+
+
+def distance(lon1, lat1, lon2, lat2):
+    arguments = (lon1, lat1, lon2, lat2)
+    lon1, lat1, lon2, lat2 = map(float, arguments)
+    distance = geopy.distance.vincenty((lat1, lon1), (lat2, lon2)).km
+    return distance
+
 
 if __name__ == "__main__":
     # default port is 5000 if you don't specify
