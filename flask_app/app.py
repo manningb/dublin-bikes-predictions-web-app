@@ -168,4 +168,4 @@ def current_weather():
 
 if __name__ == "__main__":
     # default port is 5000 if you don't specify
-    app.run(debug=True, port=5000)
+    app.run(debug=False, port=5000)

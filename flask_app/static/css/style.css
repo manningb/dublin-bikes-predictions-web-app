@@ -68,7 +68,8 @@ body,
 }
 
 body {
-  background: #8fbfdb;
+    background: white;
+}
 
 nav {
     background: #0092c5;
@@ -78,8 +79,8 @@ nav a {
     color: white;
 }
 
-    margin: 0;
-}
+/*    margin: 0;*/
+/*}*/
 #success-alert {
     position: fixed;
     top: 0;

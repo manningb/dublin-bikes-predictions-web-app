@@ -215,7 +215,7 @@ function initMap() {
             data['station'].forEach(station => {
                 stations[station.number] = [station.position_lat, station.position_lng, station.available_bikes, station.available_bike_stands];
                 const infoWindow = new google.maps.InfoWindow({
-                    content: '<h1>' + station.address + '</h1>' + '<p>Available Bikes: ' + station.available_bikes + '</p>' + '<p>Available Bike Stands: ' + station.available_bike_stands + '</p><p>' + station.last_update + '</p>',
+                    content: '<h1>' + station.address + '</h1>' + '<p>Available Bikes: ' + station.available_bikes + '</p>' + '<p>Available Bike Stands: ' + station.available_bike_stands + '</p><p>' + station.last_update + '</p>'+'<a href="stationstats-'+station.number+'">View Statistics</a>',
                 });
 
                 const marker = new google.maps.Marker({
