@@ -415,7 +415,7 @@ function calcRoute(start, end) {
 
                 // Update route bounds
                 routeBounds = updatedResponse.routes[0].bounds;
-
+                console.log(routeBounds);
                 // Fit updated bounds
                 map.fitBounds(routeBounds);
 

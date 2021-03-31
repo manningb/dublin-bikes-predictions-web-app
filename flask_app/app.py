@@ -41,7 +41,7 @@ def static_bikes():
     render template to client
     """
     global last_updated_availability_time, last_updated_availability_data, first_run
-    if ((last_updated_availability_time - datetime.datetime.now()).total_seconds() > 900 or first_run == True):
+    if ((last_updated_availability_time - datetime.datetime.now()).total_seconds() > 900 or first_run):
         first_run = False
         sql_get_availability = """select db_a.number, position_lat, position_lng, name, address, available_bikes, available_bike_stands, max(db_a.last_update) as last_update
     FROM dublin_bikes.station db_s
@@ -67,7 +67,7 @@ def current_weather():
     render template to client
     """
     global last_updated_weather_time, last_updated_weather_data, first_run_weather
-    if ((last_updated_weather_time - datetime.datetime.now()).total_seconds() > 900 or first_run_weather == True):
+    if ((last_updated_weather_time - datetime.datetime.now()).total_seconds() > 900 or first_run_weather):
         first_run_weather = False
         sql_get_weather = """SELECT *
         FROM dublin_bikes.weather_current 
