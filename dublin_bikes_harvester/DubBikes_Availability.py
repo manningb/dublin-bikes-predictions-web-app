@@ -8,6 +8,7 @@ import time
 # Imports for MySQL
 import pymysql
 from sqlalchemy import create_engine
+import pytz
 
 def availability_to_db(text, engine):
     """
@@ -15,11 +16,14 @@ def availability_to_db(text, engine):
     This needs to be run every 5 minutes
     No return value
     """
+    # set timezone
+    tz = pytz.timezone('Europe/Dublin')
     stations = json.loads(text)
-    now = datetime.datetime.utcnow()
+    print(stations)
+    now = datetime.datetime.now(tz=tz)
     for station in stations:
         try:
-            lupdate=datetime.datetime.fromtimestamp(int(station.get("last_update")) / 1000)
+            lupdate=datetime.datetime.fromtimestamp(int(station.get("last_update")) / 1000).astimezone(tz)
         except TypeError:
             print(station)
             lupdate = "0000-00-00 00:00:00"
