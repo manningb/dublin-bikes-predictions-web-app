@@ -1,11 +1,12 @@
-import os
 import datetime
+import os
 
 from flask import Flask, render_template, jsonify
 from sqlalchemy import create_engine
 
 app = Flask("__name__", template_folder="templates")
 
+# global variables used for caching
 global last_updated_availability_time, last_updated_weather_time
 last_updated_availability_time = datetime.datetime.now()
 last_updated_weather_time = datetime.datetime.now()

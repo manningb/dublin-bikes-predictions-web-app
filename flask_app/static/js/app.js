@@ -13,9 +13,9 @@ var rightMargin = 80; // Grace margin to avoid too close fits on the right and l
 
 document.onreadystatechange = function () {
     var state = document.readyState
-    if (state == 'interactive') {
+    if (state === 'interactive') {
         document.getElementById('contents').style.visibility = "hidden";
-    } else if (state == 'complete') {
+    } else if (state === 'complete') {
         setTimeout(function () {
             document.getElementById('interactive');
             document.getElementById('load').style.visibility = "hidden";
@@ -87,7 +87,7 @@ const trackLocation = ({
                        }) => {
     // Omitted for brevity
 
-    return navigator.geolocation.watchPosition(onSuccess, onError, {
+    return navigator.geolocation.getCurrentPosition(onSuccess, onError, {
         enableHighAccuracy: true,
         timeout: 5000,
         maximumAge: 0
@@ -136,7 +136,7 @@ function initMap() {
 
             $("#searchBox").on('keypress', function (e) {
                 // prevent form submission on pressing Enter as there could be more inputs to fill out
-                if (e.which == 13) {
+                if (e.which === 13) {
                     e.preventDefault();
                 }
             });
@@ -214,7 +214,7 @@ function initMap() {
             var count = 0;
             data['station'].forEach(station => {
                 stations[station.number] = [station.position_lat, station.position_lng, station.available_bikes, station.available_bike_stands];
-                const infowindow = new google.maps.InfoWindow({
+                const infoWindow = new google.maps.InfoWindow({
                     content: '<h1>' + station.address + '</h1>' + '<p>Available Bikes: ' + station.available_bikes + '</p>' + '<p>Available Bike Stands: ' + station.available_bike_stands + '</p><p>' + station.last_update + '</p>',
                 });
 
@@ -226,19 +226,12 @@ function initMap() {
 
                 google.maps.event.addListener(marker, 'click', function () {
                     activeInfoWindow && activeInfoWindow.close();
-                    infowindow.open(map, marker);
-                    activeInfoWindow = infowindow;
+                    infoWindow.open(map, marker);
+                    activeInfoWindow = infoWindow;
                 });
                 markers[station.number] = marker;
 
-                function infoCallback(content, marker) {
-                    return function () {
-                        infowindow.setContent(content);
-                        infowindow.open(map, marker);
-                    };
-                }
-
-                $("#bikes_list").append('<a href="#" onclick="myClick(' + station.number + ');" class="list-group-item list-group-item-action flex-column align-items-start"><div className="d-flex w-100 justify-content-between">\n' +
+                $("#bikes_list").append('<a href="#" onclick="myClick(' + station.number + ');" class="list-group-item list-group-item-action flex-column align-items-start"><div class="d-flex w-100 justify-content-between">\n' +
                     '                    <h5 class="mb-1">' + station.address + '</h5>\n' +
                     '                    <small>' + station.last_update +
                     '+</small>\n' +
@@ -284,25 +277,24 @@ function distance_func(lat1, lon1, lat2, lon2) {
 
 function calcDist(bike_or_station) {
     dist = {};
-    if (bike_or_station == "bike") {
+    if (bike_or_station === "bike") {
         for (var key in stations) {
             if (stations[key][2] > 0) {
-                var distance = distance_func(myLatLng["lat"], myLatLng["lng"], stations[key][0], stations[key][1]);
+                distance = distance_func(myLatLng["lat"], myLatLng["lng"], stations[key][0], stations[key][1]);
                 dist[key] = distance;
             }
         }
     } else {
         for (var key in stations) {
             if (stations[key][3] > 0) {
-                var distance = distance_func(myLatLng["lat"], myLatLng["lng"], stations[key][0], stations[key][1]);
+                distance = distance_func(myLatLng["lat"], myLatLng["lng"], stations[key][0], stations[key][1]);
                 dist[key] = distance;
             }
         }
     }
     dist = sort_object(dist);
     num = dist[0][0];
-    $("#success-alert").append("Bike Station Found!");
-    $("#success-alert").fadeTo(2000, 500).slideUp(500, function () {
+    $("#success-alert").append("Bike Station Found!").fadeTo(2000, 500).slideUp(500, function () {
         $("#success-alert").slideUp(500);
     });
 
@@ -401,7 +393,7 @@ function calcRoute(start, end) {
     };
 
     directionsService.route(request, function (response, status) {
-        if (status == google.maps.DirectionsStatus.OK) {
+        if (status === google.maps.DirectionsStatus.OK) {
             directionsDisplay.setDirections(response);
             // Define route bounds for use in offsetMap function
             routeBounds = response.routes[0].bounds;
