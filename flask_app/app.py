@@ -39,6 +39,7 @@ def sql_query(query):
     connection = engine.connect()
 
     rows = engine.execute(query)
+    connection.close()
     return rows
 
 @app.route("/hour48-<int:number>")
@@ -71,6 +72,7 @@ def hour48(number):
             df_final_future[col] = [0 for i in range(len(df_final_future))]
     result = model.predict(df_final_future[features])
     dictionary = dict(zip(df_final_future["last_update"].astype(str).to_list(), result.tolist()))
+    connection.close()
     return jsonify(dictionary)
 
 
@@ -93,6 +95,7 @@ order by time_queried asc;"""
     for row in rows:
         stations.append(dict(row))  # inset dict of data into list
         print(row)
+    connection.close()
     return jsonify(station=stations)  # return json string of data
 
 @app.route("/averagestation-<int:number>")
