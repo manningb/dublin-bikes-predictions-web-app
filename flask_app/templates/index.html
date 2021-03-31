@@ -56,7 +56,7 @@
 
 </head>
 
-<body>
+<div>
 <div id="load"></div>
 
 
@@ -98,10 +98,9 @@
 
 <div class="alert alert-success" id="success-alert">
     <button type="button" class="close" data-dismiss="alert">x</button>
-    <strong>Success! </strong> Product have added to your wishlist.
 </div>
 
-
+<div id="contents">
 <div class=" ticker-wrap">
     <div class="ticker" id="weatherScroll">
         <i class="ticker-item wi " id="weatherIcon"></i>
@@ -165,6 +164,7 @@
     </form>
 </div>
 </div>
+</div>
 <script src="static/js/app.js"></script>
 <script src="static/js/findNow.js"></script>
 
@@ -172,7 +172,6 @@
         src="https://maps.googleapis.com/maps/api/js?key={{ GMAP_API }}&callback=initMap&libraries=places&v=weekly"
         async
 ></script>
-
 </body>
 
 </html>
