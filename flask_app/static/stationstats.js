@@ -1,7 +1,6 @@
 //(number);
 
-
-google.charts.load("current", { packages: ["corechart", "gauge","calendar"] });
+google.charts.load("current", { packages: ["corechart", "gauge", "calendar"] });
 var Myarr;
 
 function fetch48(number) {
@@ -24,7 +23,6 @@ function fetch48(number) {
       google.charts.setOnLoadCallback(drawChart48hr(graphdata));
     });
 }
-
 
 function fetchAverage(number) {
   fetch("/averagestation-" + number)
@@ -80,12 +78,6 @@ function fetchStation(number) {
 fetchStation(number);
 fetch48(number);
 fetchAverage(number);
-
-
-fetch48(number);
-
-fetchAverage(number);
-
 
 function drawChart(data) {
   var options = {
