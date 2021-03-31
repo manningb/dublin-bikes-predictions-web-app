@@ -24,7 +24,6 @@ function fetch48(number) {
     });
 }
 
-
 fetchAverage(number);
 fetch48(number);
 
@@ -130,7 +129,7 @@ function drawCalAvailBikes(data) {
   var finaldata = [];
   data.forEach((element) => {
     finaldata.push([
-      new Date(element["yearq"], element["monthq"], element["dateq"]),
+      new Date(element["yearq"], element["monthq"] - 1, element["dateq"]),
       parseFloat(element["avgavailbikes"]),
     ]);
   });
@@ -156,8 +155,9 @@ function drawCalAvailBikeStation(data) {
 
   var finaldata = [];
   data.forEach((element) => {
+    console.log(element["yearq"], element["monthq"] - 1, element["dateq"]);
     finaldata.push([
-      new Date(element["yearq"], element["monthq"], element["dateq"]),
+      new Date(element["yearq"], element["monthq"] - 1, element["dateq"]),
       parseFloat(element["avgavailbikestation"]),
     ]);
   });
