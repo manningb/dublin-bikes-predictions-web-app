@@ -24,8 +24,6 @@ function fetch48(number) {
     });
 }
 
-fetchAverage(number);
-fetch48(number);
 
 function fetchAverage(number) {
   fetch("/averagestation-" + number)
@@ -79,6 +77,9 @@ function fetchStation(number) {
     });
 }
 fetchStation(number);
+fetch48(number);
+fetchAverage(number);
+
 
 function drawChart(data) {
   var options = {
