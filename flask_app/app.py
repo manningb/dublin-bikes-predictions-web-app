@@ -1,6 +1,7 @@
-from flask import Flask, render_template, jsonify
-import json
+import datetime
 import os
+
+from flask import Flask, render_template, jsonify
 from sqlalchemy import create_engine
 import os
 import requests
@@ -9,6 +10,16 @@ import pandas as pd
 import decimal
 import joblib
 app = Flask("__name__", template_folder="templates")
+
+# global variables used for caching
+global last_updated_availability_time, last_updated_weather_time
+last_updated_availability_time = datetime.datetime.now()
+last_updated_weather_time = datetime.datetime.now()
+global last_updated_availability_data, last_updated_weather_data
+global first_run_availability, first_run_weather
+first_run = True
+first_run_weather = True
+
 
 @app.route("/")
 def index():
@@ -111,20 +122,25 @@ def static_bikes():
     Get all stations
     render template to client
     """
-    sql_get_availability = """select db_a.number, position_lat, position_lng, name, address, available_bikes, available_bike_stands, max(db_a.last_update) as last_update
-FROM dublin_bikes.station db_s
-INNER JOIN dublin_bikes.availability db_a ON
-db_s.number = db_a.number
-GROUP BY number
-"""  # create select statement for stations table
+    global last_updated_availability_time, last_updated_availability_data, first_run
+    if ((last_updated_availability_time - datetime.datetime.now()).total_seconds() > 900 or first_run):
+        first_run = False
+        sql_get_availability = """select db_a.number, position_lat, position_lng, name, address, available_bikes, available_bike_stands, max(db_a.last_update) as last_update
+    FROM dublin_bikes.station db_s
+    INNER JOIN dublin_bikes.availability db_a ON
+    db_s.number = db_a.number
+    GROUP BY number
+    """  # create select statement for stations table
 
-    rows = sql_query(sql_get_availability)  # execute select statement
+        rows = sql_query(sql_get_availability)  # execute select statement
 
-    stations = []
-    for row in rows:
-        stations.append(dict(row))  # inset dict of data into list
-        print(row)
-    return jsonify(station=stations)  # return json string of data
+        last_updated_availability_data = []
+        for row in rows:
+            last_updated_availability_data.append(dict(row))  # inset dict of data into list
+            print(row)
+    last_updated_availability_time = datetime.datetime.now()
+    return jsonify(station=last_updated_availability_data)  # return json string of data
+
 
 @app.route("/current_weather")
 def current_weather():
@@ -132,18 +148,23 @@ def current_weather():
     Get all stations
     render template to client
     """
-    sql_get_weather = """SELECT *
-    FROM dublin_bikes.weather_current 
-    ORDER  BY last_update DESC
-    LIMIT  1;
-        """
+    global last_updated_weather_time, last_updated_weather_data, first_run_weather
+    if ((last_updated_weather_time - datetime.datetime.now()).total_seconds() > 900 or first_run_weather):
+        first_run_weather = False
+        sql_get_weather = """SELECT *
+        FROM dublin_bikes.weather_current 
+        ORDER  BY last_update DESC
+        LIMIT  1;
+            """
 
-    rows = sql_query(sql_get_weather)
-    weather = []
-    for row in rows:
-        weather.append(dict(row))  # inset dict of data into list
-        print(row)
-    return jsonify(weather=weather)  # return json string of data
+        rows = sql_query(sql_get_weather)
+        last_updated_weather_data = []
+        for row in rows:
+            last_updated_weather_data.append(dict(row))  # inset dict of data into list
+            print(row)
+    last_updated_weather_time = datetime.datetime.now()
+    return jsonify(weather=last_updated_weather_data)  # return json string of data
+
 
 if __name__ == "__main__":
     # default port is 5000 if you don't specify
