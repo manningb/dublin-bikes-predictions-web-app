@@ -87,7 +87,7 @@ def statstation(number):
     connection = engine.connect()
 
     sql_create_schema = f"""SELECT * FROM dublin_bikes.availability
-where number = {number}
+where number = 2 && abs(timestampdiff(day, now(), time_queried)) <= 7
 order by time_queried asc;"""
     rows = engine.execute(sql_create_schema)  # execute select statement
 
