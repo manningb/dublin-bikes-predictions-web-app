@@ -141,7 +141,7 @@ def static_bikes():
         for row in rows:
             last_updated_availability_data.append(dict(row))  # inset dict of data into list
             print(row)
-    last_updated_availability_time = datetime.datetime.now()
+        last_updated_availability_time = datetime.datetime.now()
     return jsonify(station=last_updated_availability_data)  # return json string of data
 
 
@@ -165,7 +165,7 @@ def current_weather():
         for row in rows:
             last_updated_weather_data.append(dict(row))  # inset dict of data into list
             print(row)
-    last_updated_weather_time = datetime.datetime.now()
+        last_updated_weather_time = datetime.datetime.now()
     return jsonify(weather=last_updated_weather_data)  # return json string of data
 
 
