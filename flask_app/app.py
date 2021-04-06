@@ -40,6 +40,7 @@ def sql_query(query):
 
     rows = engine.execute(query)
     connection.close()
+    engine.dispose()
     return rows
 
 @app.route("/hour48-<int:number>")
@@ -73,9 +74,8 @@ def hour48(number):
     result = model.predict(df_final_future[features])
     dictionary = dict(zip(df_final_future["last_update"].astype(str).to_list(), result.tolist()))
     connection.close()
+    engine.dispose()
     return jsonify(dictionary)
-
-
 
 @app.route("/statstation-<int:number>")
 def statstation(number):
@@ -96,6 +96,7 @@ order by time_queried asc;"""
         stations.append(dict(row))  # inset dict of data into list
         print(row)
     connection.close()
+    engine.dispose()
     return jsonify(station=stations)  # return json string of data
 
 @app.route("/averagestation-<int:number>")
@@ -111,7 +112,8 @@ group by date(time_queried)
 order by time_queried desc;"""
 
     rows = engine.execute(sql_create_schema)  # execute select statement
-
+    connection.close()
+    engine.dispose()
     stations = []
     for row in rows:
         stations.append(dict(row))  # inset dict of data into list
@@ -136,12 +138,12 @@ def static_bikes():
     """  # create select statement for stations table
 
         rows = sql_query(sql_get_availability)  # execute select statement
-
+        
         last_updated_availability_data = []
         for row in rows:
             last_updated_availability_data.append(dict(row))  # inset dict of data into list
             print(row)
-    last_updated_availability_time = datetime.datetime.now()
+        last_updated_availability_time = datetime.datetime.now()
     return jsonify(station=last_updated_availability_data)  # return json string of data
 
 
@@ -165,7 +167,7 @@ def current_weather():
         for row in rows:
             last_updated_weather_data.append(dict(row))  # inset dict of data into list
             print(row)
-    last_updated_weather_time = datetime.datetime.now()
+        last_updated_weather_time = datetime.datetime.now()
     return jsonify(weather=last_updated_weather_data)  # return json string of data
 
 
