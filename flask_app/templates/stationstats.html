@@ -12,17 +12,35 @@
 
   <div class="container">
     <div class="row">
-      <div class="col-md-12"><div class="mycentre" id="donutchart"></div></div></div>
+      <div class="col-md-12"><div class="chart mycentre" id="donutchart"></div></div></div>
     </div>
     <div class="row">
       <div class="col-md-6">
-        <div class="split" id="curve_chart_station"></div>
+        <div class="chart split" id="curve_chart_station"></div>
       </div>
-      <div class="col-md-6"><div class="split" id="curve_chart"></div></div>
+      <div class="col-md-6"><div class="chart split" id="curve_chart"></div></div>
     </div>
     <div class="row">
-      <div class="col-md-6"><div class="split" id="48hour"></div></div>
-      <div class="col-md-6"><div class="split" id="48hourbikes"></div></div>
+      <div class="col-md-6"><div class="chart split" id="48hour"></div></div>
+      <div class="col-md-6"><div class="chart split" id="48hourbikes"></div></div>
+    </div>
+
+    <div class="row predicted">
+      <div class="col-md-6 predicted">
+        <h2>Precited availability</h2>     
+        <label for="cars">Choose a day:</label>
+        <select name="cars" id="select-day">
+        </select>
+        <button onclick="populatepredict()">Submit</button>
+      </div>
+        <div class="col-md-3 predicted">
+          <h2>Predicted Bikes</h2>
+          <h3 id="predbikes"></h3>
+        </div>
+        <div class="col-md-3 predicted">
+          <h2>Predicted Available Spaces</h2>
+          <h3 id="predstation"></h3>
+        </div>
     </div>
 
     <div class="row">

@@ -4,6 +4,7 @@ google.charts.load("current", { packages: ["corechart", "gauge", "calendar"] });
 var Myarr;
 var stations;
 var bikestands;
+var predictvals = [];
 
 var xmlhttp = new XMLHttpRequest();
 xmlhttp.onreadystatechange = function () {
@@ -34,6 +35,7 @@ function fetch48(number) {
       for (var date in data) {
         arr.push([date, data[date]]);
         predictbikes.push([date, bikestands - data[date]]);
+        predictvals.push([date, data[date], bikestands - data[date]]);
       }
       //(arr);
       var graphdata = new google.visualization.DataTable();
@@ -46,6 +48,7 @@ function fetch48(number) {
       graphdatabikes.addColumn("number", "available_bikes");
       graphdatabikes.addRows(predictbikes);
       google.charts.setOnLoadCallback(drawChart48hrbikes(graphdatabikes));
+      populatedays();
     });
 }
 
@@ -237,4 +240,29 @@ function drawCalAvailBikeStation(data) {
   };
 
   chart.draw(dataTable, options);
+}
+
+function populatedays() {
+  var days = "";
+  predictvals.forEach((element) => {
+    days += "<option value='" + element[0] + "'>" + element[0] + "</option>";
+  });
+  console.log(days);
+  document.getElementById("select-day").innerHTML = days;
+}
+
+function populatepredict() {
+  var prebikes;
+  var prestations;
+  var document_value = document.getElementById("select-day").value;
+  console.log(document_value);
+  predictvals.forEach((element) => {
+    if (document_value == element[0]) {
+      prebikes = element[1];
+      prestations = element[2];
+    }
+  });
+  console.log(prebikes);
+  document.getElementById("predbikes").innerHTML = prebikes.toFixed(2);
+  document.getElementById("predstation").innerHTML = prestations.toFixed(2);
 }
