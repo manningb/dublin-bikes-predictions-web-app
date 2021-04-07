@@ -23,7 +23,7 @@ first_run_weather = True
 
 @app.route("/")
 def index():
-    GMAP_API = "AIzaSyDX7gu_rKXux6P20MBh1ThL3FfOKoGH64Q"
+    GMAP_API = "AIzaSyDgFWhCxnKXACxncZ3VYjfXVf0XkTpqfDc"
     return render_template("index.html", GMAP_API=GMAP_API)
 
 

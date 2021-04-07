@@ -149,11 +149,27 @@ function initMap() {
                     content: '<h1>' + station.address + '</h1>' + '<p>Available Bikes: ' + station.available_bikes + '</p>' + '<p>Available Bike Stands: ' + station.available_bike_stands + '</p><p>' + station.last_update + '</p>'+'<a href="stationstats-'+station.number+'">View Statistics</a>',
                 });
 
+
+                  var availability_percentage = parseInt(station.available_bikes)/(parseInt(station.available_bikes)+parseInt(station.available_bike_stands));
+                if (availability_percentage > .7) {
+                    color = "green";
+                } else if (availability_percentage > .3) {
+                    color = "orange";
+                } else {
+                    color = "red";
+                }
+                let url = "http://maps.google.com/mapfiles/ms/icons/";
+                  url += color + "-dot.png";
+                console.log(url);
                 const marker = new google.maps.Marker({
                     position: {lat: station.position_lat, lng: station.position_lng},
                     map,
-                    title: "Hello World!",
+                    icon: {
+                          url: url
+                        },
+                    title: station.address,
                 });
+
 
                 google.maps.event.addListener(marker, 'click', function () {
                     activeInfoWindow && activeInfoWindow.close();
