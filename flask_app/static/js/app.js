@@ -11,75 +11,6 @@ var overlayWidth = 200; // Width of the overlay DIV
 var leftMargin = 30; // Grace margin to avoid too close fits on the edge of the overlay
 var rightMargin = 80; // Grace margin to avoid too close fits on the right and leave space for the controls
 
-document.onreadystatechange = function () {
-    var state = document.readyState
-    if (state === 'interactive') {
-        document.getElementById('contents').style.visibility = "hidden";
-    } else if (state === 'complete') {
-        setTimeout(function () {
-            document.getElementById('interactive');
-            document.getElementById('load').style.visibility = "hidden";
-            document.getElementById('contents').style.visibility = "visible";
-        }, 1000);
-    }
-}
-
-overlayWidth += leftMargin;
-
-function msToBeaufort(ms) {
-    return Math.ceil(Math.cbrt(Math.pow(ms / 0.836, 2)));
-}
-
-window.onload = function () {
-    fetch("/current_weather").then(response => {
-        return response.json();
-    }).then(data => {
-        var weather_icon_map = {
-            "Clouds": "cloudy",
-            "Fog": "fog",
-            "Mist": "rain-mix",
-            "Clear": "sunny",
-            "Rain": "rain",
-            "Drizzle": "sprinkle",
-            "Thunderstorm": "thunderstorm",
-            "Snow": "snow",
-        };
-        var d = new Date()
-        var hour = d.getHours();
-        var date = new Date().toLocaleString();
-        var hour12 = hour % 12;
-        var time;
-        if (hour >= 7 && hour <= 20) {
-            time = "day";
-        } else {
-            time = "night"
-            weather_icon_map["Clear"] = "clear";
-        }
-        var tab = "&nbsp;&nbsp;&nbsp;&nbsp;"
-        beaufortSpeed = Math.round(msToBeaufort(data['weather'][0].wind_speed));
-        weather_class = "wi-" + time + "-" + weather_icon_map[data['weather'][0].weather_main];
-        weatherIconElement = document.getElementById("weatherIcon");
-        timeIconElement = document.getElementById("timeIcon");
-        windDegIconElement = document.getElementById("windDegIcon");
-        windSpeedIconElement = document.getElementById("windSpeedIcon");
-        windDegIconElement.classList.add("towards-" + data['weather'][0].wind_deg + "-deg");
-        windSpeedIconElement.classList.add("wi-wind-beaufort-" + beaufortSpeed);
-
-        weatherIconElement.classList.add(weather_class);
-        timeIconElement.classList.add("wi-time-" + hour12);
-        temp_celsius = (parseFloat(data['weather'][0].temp) - 273.15).toFixed(2);
-        feelslike_celsius = (parseFloat(data['weather'][0].feels_like) - 273.15).toFixed(2);
-
-        document.getElementById('weatherDescText').innerHTML += data['weather'][0].weather_main + ", " + data['weather'][0].weather_description + tab;
-        document.getElementById('timeText').innerHTML += date + tab;
-        document.getElementById('tempText').innerHTML += "Temp: " + temp_celsius + "°C, Feels Like: " + feelslike_celsius + "°C" + tab;
-        document.getElementById('windText').innerHTML += "Wind Speed: " + data['weather'][0].wind_speed + "m/s" + tab;
-        document.getElementById('windDegText').innerHTML += "Wind Degrees: " + data['weather'][0].wind_deg + "°" + tab;
-
-
-    })
-};
-
 
 const trackLocation = ({
                            onSuccess, onError = () => {
@@ -218,11 +149,27 @@ function initMap() {
                     content: '<h1>' + station.address + '</h1>' + '<p>Available Bikes: ' + station.available_bikes + '</p>' + '<p>Available Bike Stands: ' + station.available_bike_stands + '</p><p>' + station.last_update + '</p>'+'<a href="stationstats-'+station.number+'">View Statistics</a>',
                 });
 
+
+                  var availability_percentage = parseInt(station.available_bikes)/(parseInt(station.available_bikes)+parseInt(station.available_bike_stands));
+                if (availability_percentage > .7) {
+                    color = "green";
+                } else if (availability_percentage > .3) {
+                    color = "orange";
+                } else {
+                    color = "red";
+                }
+                let url = "http://maps.google.com/mapfiles/ms/icons/";
+                  url += color + "-dot.png";
+                console.log(url);
                 const marker = new google.maps.Marker({
                     position: {lat: station.position_lat, lng: station.position_lng},
                     map,
-                    title: "Hello World!",
+                    icon: {
+                          url: url
+                        },
+                    title: station.address,
                 });
+
 
                 google.maps.event.addListener(marker, 'click', function () {
                     activeInfoWindow && activeInfoWindow.close();

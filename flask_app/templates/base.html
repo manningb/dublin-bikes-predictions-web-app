@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% block head %}
+    <!-- Jqeury -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+      crossorigin="anonymous"
+    />
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+      integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+      crossorigin="anonymous"
+    ></script>
+
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <title>Dublin Bikes</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <link
+      href="{{ url_for('static', filename='css/style.css') }}"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="{{ url_for('static', filename='css/weather-icons.min.css') }}"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="{{ url_for('static', filename='css/weather-icons-wind.min.css') }}"
+      rel="stylesheet"
+      type="text/css"
+    />
+    
+    {% endblock %}
+  </head>
+  <body>
+    {% block navbar %}
+    <div>
+      <div id="load"></div>
+  
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button
+              type="button"
+              class="navbar-toggle collapsed"
+              data-toggle="collapse"
+              data-target="#bs-example-navbar-collapse-1"
+              aria-expanded="false"
+            >
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Dublin Bikes Tracker</a>
+          </div>
+  
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+              {#
+              <li><a href="#">Link</a></li>
+              #} {#
+              <li class="dropdown">
+                #} {#
+                <a
+                  href="#"
+                  class="dropdown-toggle"
+                  data-toggle="dropdown"
+                  role="button"
+                  aria-haspopup="true"
+                  #}
+                  {#
+                  aria-expanded="false"
+                  >Dropdown <span class="caret"></span></a
+                >#} {#
+                <ul class="dropdown-menu">
+                  #} {#
+                  <li><a href="#">Action</a></li>
+                  #} {#
+                  <li><a href="#">Another action</a></li>
+                  #} {#
+                  <li><a href="#">Something else here</a></li>
+                  #} {#
+                  <li role="separator" class="divider"></li>
+                  #} {#
+                  <li><a href="#">Separated link</a></li>
+                  #} {#
+                </ul>
+                #} {#
+              </li>
+              #}
+            </ul>
+          </div>
+          <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+      </nav>
+  
+      <div class="alert alert-success" id="success-alert">
+        <button type="button" class="close" data-dismiss="alert">x</button>
+      </div>
+  
+      <div class="ticker-wrap">
+        <div class="ticker" id="weatherScroll">
+          <i class="ticker-item wi" id="weatherIcon"></i>
+          <p class="ticker-item" id="weatherDescText"></p>
+          <i class="ticker-item wi" id="timeIcon"></i>
+          <p class="ticker-item" id="timeText"></p>
+          <i class="ticker-item wi wi-thermometer" id="tempIcon"></i>
+          <p class="ticker-item" id="tempText"></p>
+          <i class="ticker-item wi" id="windSpeedIcon"></i>
+          <p class="ticker-item" id="windText"></p>
+          <i class="ticker-item wi wi-wind" id="windDegIcon"></i>
+          <p class="ticker-item" id="windDegText"></p>
+        </div>
+      </div>
+  
+    {% endblock %}
+
+    {% block footer %}
+    <script src="static/js/template.js"></script>
+    {% endblock %}
+  </body>
+</html>

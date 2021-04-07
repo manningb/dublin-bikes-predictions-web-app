@@ -23,7 +23,7 @@ first_run_weather = True
 
 @app.route("/")
 def index():
-    GMAP_API = "AIzaSyDX7gu_rKXux6P20MBh1ThL3FfOKoGH64Q"
+    GMAP_API = "AIzaSyDgFWhCxnKXACxncZ3VYjfXVf0XkTpqfDc"
     return render_template("index.html", GMAP_API=GMAP_API)
 
 
@@ -87,7 +87,7 @@ def statstation(number):
     connection = engine.connect()
 
     sql_create_schema = f"""SELECT * FROM dublin_bikes.availability
-where number = {number} && abs(timestampdiff(day, now(), time_queried)) <= 7
+where number = 2 && abs(timestampdiff(day, now(), time_queried)) <= 7
 order by time_queried asc;"""
     rows = engine.execute(sql_create_schema)  # execute select statement
 
