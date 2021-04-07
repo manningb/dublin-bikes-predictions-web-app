@@ -26,6 +26,10 @@ def index():
     GMAP_API = "AIzaSyDgFWhCxnKXACxncZ3VYjfXVf0XkTpqfDc"
     return render_template("index.html", GMAP_API=GMAP_API)
 
+@app.route("/statistics")
+def statistics():
+    return render_template("main_stats.html")
+
 
 @app.route("/stationstats-<int:number>")
 def stationstats(number):
