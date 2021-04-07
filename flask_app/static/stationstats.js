@@ -10,7 +10,7 @@ var xmlhttp = new XMLHttpRequest();
 xmlhttp.onreadystatechange = function () {
   if (this.readyState == 4 && this.status == 200) {
     stations = JSON.parse(this.responseText);
-    console.log(stations);
+    //.log(stations);
     stations.forEach((element) => {
       if (element["number"] == number) {
         document.getElementById("stationname").innerHTML = element["name"];
@@ -106,7 +106,7 @@ function fetchStation(number) {
           element["available_bikes"],
         ]);
       });
-      console.log(availablestations);
+      //.log(availablestations);
       graphbikes.addRows(availablebikes);
       graphstations.addRows(availablestations);
       google.charts.setOnLoadCallback(drawPieChart(pieData));
@@ -247,7 +247,7 @@ function populatedays() {
   predictvals.forEach((element) => {
     days += "<option value='" + element[0] + "'>" + element[0] + "</option>";
   });
-  console.log(days);
+  //.log(days);
   document.getElementById("select-day").innerHTML = days;
 }
 
@@ -255,14 +255,14 @@ function populatepredict() {
   var prebikes;
   var prestations;
   var document_value = document.getElementById("select-day").value;
-  console.log(document_value);
+  //.log(document_value);
   predictvals.forEach((element) => {
     if (document_value == element[0]) {
       prebikes = element[1];
       prestations = element[2];
     }
   });
-  console.log(prebikes);
+  //.log(prebikes);
   document.getElementById("predbikes").innerHTML = prebikes.toFixed(2);
   document.getElementById("predstation").innerHTML = prestations.toFixed(2);
 }
