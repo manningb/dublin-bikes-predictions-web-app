@@ -3,20 +3,24 @@
 google.charts.load("current", { packages: ["corechart", "gauge", "calendar"] });
 var Myarr;
 var stations;
+var bikestands;
 
-function fetchstation() {
-  fetch("static_bikes.json")
-    .then((response) => {
-      console.log(response);
-      return response.json();
-    })
-    .then((data) => {
-      //("data: ", data);
-      stations = data;
-      console.log(data);
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function () {
+  if (this.readyState == 4 && this.status == 200) {
+    stations = JSON.parse(this.responseText);
+    console.log(stations);
+    stations.forEach((element) => {
+      if (element["number"] == number) {
+        document.getElementById("stationname").innerHTML = element["name"];
+        bikestands = element["bike_stands"];
+      }
     });
-}
-fetchStation();
+  }
+};
+
+xmlhttp.open("GET", "static/static_bikes.json", true);
+xmlhttp.send();
 
 function fetch48(number) {
   fetch("/hour48-" + number)
@@ -26,9 +30,10 @@ function fetch48(number) {
     .then((data) => {
       //("data: ", data);
       var arr = [];
-
+      var predictbikes = [];
       for (var date in data) {
         arr.push([date, data[date]]);
+        predictbikes.push([date, bikestands - data[date]]);
       }
       //(arr);
       var graphdata = new google.visualization.DataTable();
@@ -36,6 +41,11 @@ function fetch48(number) {
       graphdata.addColumn("number", "available_bike_stands");
       graphdata.addRows(arr);
       google.charts.setOnLoadCallback(drawChart48hr(graphdata));
+      var graphdatabikes = new google.visualization.DataTable();
+      graphdatabikes.addColumn("string", "time_queried");
+      graphdatabikes.addColumn("number", "available_bikes");
+      graphdatabikes.addRows(predictbikes);
+      google.charts.setOnLoadCallback(drawChart48hrbikes(graphdatabikes));
     });
 }
 
@@ -109,6 +119,7 @@ function drawChart(data) {
   var options = {
     title: "Available Bikes",
     legend: { position: "bottom" },
+    colors: ["red"],
   };
 
   var chart = new google.visualization.LineChart(
@@ -122,7 +133,6 @@ function drawChart2(data) {
   var options = {
     title: "Available Bike Stands",
     legend: { position: "bottom" },
-    colors: ["red"],
   };
 
   var chart = new google.visualization.LineChart(
@@ -140,6 +150,20 @@ function drawChart48hr(data) {
 
   var chart = new google.visualization.LineChart(
     document.getElementById("48hour")
+  );
+
+  chart.draw(data, options);
+}
+
+function drawChart48hrbikes(data) {
+  var options = {
+    title: "Predicted Available Bikes",
+    legend: { position: "bottom" },
+    colors: ["red"],
+  };
+
+  var chart = new google.visualization.LineChart(
+    document.getElementById("48hourbikes")
   );
 
   chart.draw(data, options);
