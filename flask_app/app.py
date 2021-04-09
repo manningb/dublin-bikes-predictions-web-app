@@ -23,7 +23,7 @@ first_run_weather = True
 
 @app.route("/")
 def index():
-    GMAP_API = "AIzaSyDgFWhCxnKXACxncZ3VYjfXVf0XkTpqfDc"
+    GMAP_API = os.environ.get("GMAP_API")
     return render_template("index.html", GMAP_API=GMAP_API)
 
 
@@ -45,9 +45,15 @@ def sql_query(query):
 
 @app.route("/hour48-<int:number>")
 def hour48(number):
-    model = joblib.load('../data_analytics/station-2.pkl')
-    features = ['temp',  'humidity', 'wind_speed', 'dayquery_Friday', 'dayquery_Monday', 'dayquery_Saturday', 'dayquery_Sunday', 'dayquery_Thursday',
- 'dayquery_Tuesday', 'dayquery_Wednesday', 'weather_main_Clear', 'weather_main_Clouds', 'weather_main_Drizzle', 'weather_main_Fog', 'weather_main_Mist', 'weather_main_Rain']
+    model = joblib.load(f'../data_analytics/pickles/station-{number}.pkl')
+
+    features = ['temp', 'humidity', 'wind_speed', 'pressure', 'dayquery_Friday', 'dayquery_Monday', 'dayquery_Saturday', 'dayquery_Sunday', 'dayquery_Thursday', 'dayquery_Tuesday', 'dayquery_Wednesday', 'weather_main_Clear', 'weather_main_Clouds', 'weather_main_Drizzle', 'weather_main_Fog', 'weather_main_Mist', 'weather_main_Rain', 'weather_main_Snow', 'weather_main_Thunderstorm', 'hourquery_0', 'hourquery_1', 'hourquery_2', 'hourquery_3', 'hourquery_4', 'hourquery_5', 'hourquery_6', 'hourquery_7', 'hourquery_8', 'hourquery_9', 'hourquery_10', 'hourquery_11', 'hourquery_12', 'hourquery_13', 'hourquery_14', 'hourquery_15', 'hourquery_16', 'hourquery_17', 'hourquery_18', 'hourquery_19', 'hourquery_20', 'hourquery_21', 'hourquery_22', 'hourquery_23']
+
+    print(len(features))
+    # importance = model.feature_importances_
+    # print(importance)
+    # for i, v in enumerate(importance):
+    #     print(f'Feature: {features[i]}, Score: {v:.5f}')
 
     DB_USER = os.environ.get("DB_USER")
     DB_PASS = os.environ.get("DB_PASS")
@@ -56,8 +62,8 @@ def hour48(number):
     engine = create_engine("mysql+pymysql://{0}:{1}@{2}".format(DB_USER, DB_PASS, DB_URL), echo=True)
     connection = engine.connect()
 
-    statement = """SELECT last_update, dayname(last_update) as dayquery, hour(last_update) as hourquery, temp, humidity, wind_speed, weather_main FROM dublin_bikes.weather_forecast_1hour
-    where station_number = 2
+    statement = f"""SELECT last_update, dayname(last_update) as dayquery, hour(last_update) as hourquery, temp, humidity, pressure, wind_speed, weather_main FROM dublin_bikes.weather_forecast_1hour
+    where station_number = {number}
     order by time_queried desc, last_update
     limit 48;"""
     df_future = pd.read_sql_query(statement, engine)
@@ -71,6 +77,9 @@ def hour48(number):
     for col in features:
         if col not in df_final_future.columns:
             df_final_future[col] = [0 for i in range(len(df_final_future))]
+    print(df_final_future.columns)
+    print(len(df_final_future.columns))
+
     result = model.predict(df_final_future[features])
     dictionary = dict(zip(df_final_future["last_update"].astype(str).to_list(), result.tolist()))
     connection.close()
@@ -87,7 +96,7 @@ def statstation(number):
     connection = engine.connect()
 
     sql_create_schema = f"""SELECT * FROM dublin_bikes.availability
-where number = 2 && abs(timestampdiff(day, now(), time_queried)) <= 7
+where number = {number} && abs(timestampdiff(day, now(), time_queried)) <= 7
 order by time_queried asc;"""
     rows = engine.execute(sql_create_schema)  # execute select statement
 
@@ -173,4 +182,4 @@ def current_weather():
 
 if __name__ == "__main__":
     # default port is 5000 if you don't specify
-    app.run(debug=False, port=5000)
+    app.run(debug=False, port=5000, ssl_context='adhoc')
