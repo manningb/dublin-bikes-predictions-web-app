@@ -12,6 +12,39 @@ var leftMargin = 30; // Grace margin to avoid too close fits on the edge of the 
 var rightMargin = 80; // Grace margin to avoid too close fits on the right and leave space for the controls
 
 
+$(document).ready(function() {
+    $('.js-example-basic-single').select2();
+    var actualDate = new Date();
+    var newDate = new Date(actualDate.getFullYear(), actualDate.getMonth(), actualDate.getDate()+13);
+
+    $('#demo').datetimepicker({
+        inline:true,
+          todayHighlight: true,
+          // autoclose: true,
+          // startDate: new Date(),
+            minDate: actualDate,
+          maxDate: newDate
+    });
+
+
+});
+
+$('#datetime_picker').on('click', function () {
+    var d = $('#demo').datetimepicker('getValue');
+    console.log(d.getDay());
+    console.log(d.getHours());
+});
+
+function stationToStation() {
+var selectedOptionVal1 = $('#station_dd_1').find(":selected").val();
+var selectedOptionVal2 = $('#station_dd_2').find(":selected").val();
+console.log([stations[selectedOptionVal1][0],stations[selectedOptionVal1][1]],[stations[selectedOptionVal2][0],stations[selectedOptionVal2][1]]);
+calcRoute({"lat":stations[selectedOptionVal1][0],"lng":stations[selectedOptionVal1][1]},[stations[selectedOptionVal2][0],stations[selectedOptionVal2][1]]);
+    $('#overlay').css({'opacity': 100});
+    return false;
+}
+
+
 const trackLocation = ({
                            onSuccess, onError = () => {
     }
@@ -149,7 +182,8 @@ function initMap() {
                     content: '<h1>' + station.address + '</h1>' + '<p>Available Bikes: ' + station.available_bikes + '</p>' + '<p>Available Bike Stands: ' + station.available_bike_stands + '</p><p>' + station.last_update + '</p>'+'<a href="stationstats-'+station.number+'">View Statistics</a>',
                 });
 
-
+                $("#station_dd_1").append("<option value='"+station.number+"'>"+station.number + ": "+station.address+"</option>")
+                $("#station_dd_2").append("<option value='"+station.number+"'>"+station.number + ": "+station.address+"</option>")
                   var availability_percentage = parseInt(station.available_bikes)/(parseInt(station.available_bikes)+parseInt(station.available_bike_stands));
                 if (availability_percentage > .7) {
                     color = "green";

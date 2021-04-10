@@ -87,64 +87,20 @@
               placeholder="O'Connell St. Dublin"
             />
           </div>
-          {#
-          <div class="form-group">
-            #} {#
-            <label for="exampleFormControlSelect1">Example select</label>#} {#
-            <select class="form-control" id="exampleFormControlSelect1">
-              #} {#
-              <option>1</option>
-              #} {#
-              <option>2</option>
-              #} {#
-              <option>3</option>
-              #} {#
-              <option>4</option>
-              #} {#
-              <option>5</option>
-              #} {#</select
-            >#} {#
-          </div>
-          #} {#
-          <div class="form-group">
-            #} {#
-            <label for="exampleFormControlSelect2"
-              >Example multiple select</label
-            >#} {#
-            <select
-              multiple
-              class="form-control"
-              id="exampleFormControlSelect2"
-            >
-              #} {#
-              <option>1</option>
-              #} {#
-              <option>2</option>
-              #} {#
-              <option>3</option>
-              #} {#
-              <option>4</option>
-              #} {#
-              <option>5</option>
-              #} {#</select
-            >#} {#
-          </div>
-          #} {#
-          <div class="form-group">
-            #} {#
-            <label for="exampleFormControlTextarea1">Example textarea</label>#}
-            {#
-            <textarea
-              class="form-control"
-              id="exampleFormControlTextarea1"
-              rows="3"
-            ></textarea
-            >#} {#
-          </div>
-          #}
+              <select style="width:100%;" class="js-example-basic-single" id="station_dd_1" name="station_dd_1">
+                <br>
+                </select>
+              <select style="width:100%;" class="js-example-basic-single" id="station_dd_2" name="station_dd_1">
+                </select>
+            <button onclick="return stationToStation()">Get Route!</button>
+            </form>
         </form>
+
       </div>
     </div>
+<input type="text" id="demo"/>
+      <button id="datetime_picker">Button</button>
+
   </div>
   <script src="static/js/app.js"></script>
 
