@@ -13,6 +13,12 @@ body,
   width: 100%;
 }
 
+.background {
+background: rgb(255,255,255);
+background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(0,146,197,1) 100%);
+
+}
+
 #weatherScroll {
   margin: 0px 3px 10px;
 }
@@ -112,12 +118,22 @@ h2 {
   background-size: 30vh;
 }
 
+.navbar .navbar-brand {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+}
+.navbar-brand img {
+  height: 100%;
+  margin-right: 20px;
+}
+
+
 #overlay {
   position: absolute;
   width: 20vw;
   height: 80vh;
   background: white;
-  opacity: 0;
   top: 0;
   left: 0;
   overflow: auto;
@@ -131,6 +147,21 @@ h2 {
 #overlayContent p {
   font-size: 12px;
   margin: 6px 0;
+}
+
+#close {
+    float:right;
+    display:inline-block;
+    padding:2px 5px;
+    background:#ccc;
+}
+
+#close:hover {
+    float:right;
+    display:inline-block;
+    padding:2px 5px;
+    background:#ccc;
+    color:#fff;
 }
 
 small {

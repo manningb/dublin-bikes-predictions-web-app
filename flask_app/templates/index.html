@@ -1,53 +1,50 @@
 {% extends "base.html" %}
 
 
-  {% block head %} {{ super() }}
+{% block head %} {{ super() }}
 
-  <script type="text/javascript">
-    $(document).ready(function () {
-      var speed = 5;
-      var items,
-        scroller = $("#scroller");
-      var width = 0;
-      scroller.children().each(function () {
-        width += $(this).outerWidth(true);
-      });
-      scroller.css("width", width);
-      scroll();
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var speed = 5;
+            var items,
+                scroller = $("#scroller");
+            var width = 0;
+            scroller.children().each(function () {
+                width += $(this).outerWidth(true);
+            });
+            scroller.css("width", width);
+            scroll();
 
-      function scroll() {
-        items = scroller.children();
-        var scrollWidth = items.eq(0).outerWidth();
-        scroller.animate(
-          { left: 0 - scrollWidth },
-          (scrollWidth * 100) / speed,
-          "linear",
-          changeFirst
-        );
-      }
+            function scroll() {
+                items = scroller.children();
+                var scrollWidth = items.eq(0).outerWidth();
+                scroller.animate(
+                    {left: 0 - scrollWidth},
+                    (scrollWidth * 100) / speed,
+                    "linear",
+                    changeFirst
+                );
+            }
 
-      function changeFirst() {
-        scroller.append(items.eq(0).remove()).css("left", 0);
-        scroll();
-      }
-    });
-  </script>
-  {% endblock %}
+            function changeFirst() {
+                scroller.append(items.eq(0).remove()).css("left", 0);
+                scroll();
+            }
+        });
+    </script>
+{% endblock %}
 
-  {% block navbar %}
-  {{ super() }}
+{% block navbar %}
+    {{ super() }}
     <div id="contents">
-      <div class="col-md-9">
-        <div id="map"></div>
-        <div id="overlay">
-          <div id="overlayContent"></div>
+        <div id="left_col" class="col-md-9">
+            <div id="map"></div>
+            <!-- For displaying user's coordinate or error message. -->
+            <div id="info" class="info"></div>
         </div>
-        <!-- For displaying user's coordinate or error message. -->
-        <div id="info" class="info"></div>
-      </div>
-      <div class="col-md-3">
-        <div
-          style="
+        <div class="col-md-3">
+            <div
+                    style="
             max-width: 100%;
             max-height: 40vh;
             margin-bottom: 10px;
@@ -55,58 +52,64 @@
             -webkit-overflow-scrolling: touch;
             overflow-x: hidden;
           "
-        >
-          <div class="list-group" id="bikes_list"></div>
-        </div>
-        <form style="width: 100%; height: 40vh">
-          <button
-            type="button"
-            onclick="findNow('bike')"
-            class="btn btn-primary"
-          >
-            Find Bike Now
-          </button>
-          <button
-            type="button"
-            onclick="findNow('station')"
-            class="btn btn-secondary"
-          >
-            Find Station Now
-          </button>
-          <div class="form-group">
-            <label
-              for="searchBox"
-              class="controls"
-              type="text"
-              placeholder="Search Box"
-              >Search Box</label
             >
-            <input
-              id="searchBox"
-              class="form-control"
-              placeholder="O'Connell St. Dublin"
-            />
-          </div>
-              <select style="width:100%;" class="js-example-basic-single form-control" id="station_dd_1" name="station_dd_1">
-                <br>
+                <div class="list-group" id="bikes_list"></div>
+            </div>
+            <h3>Set Current Location</h3>
+            <div class="input-group mb-11">
+                <input
+                        id="searchBox"
+                        class="form-control"
+                        placeholder="O'Connell St. Dublin"
+                />
+                <span role="button"
+                      onclick="GetLatlong()"
+                      class="input-group-addon"
+                >
+                    Set Location
+                </span>
+            </div>
+            <br>
+            <form class="text-center " style="width: 100%; height: 40vh">
+                <button
+                        style="width: 45%;"
+                        type="button btn-block"
+                        onclick="findNow('bike')"
+                        class="btn btn-primary"
+                >
+                    Find Bike Now
+                </button>
+                <button
+                        style="width: 45%;"
+
+                        type="button btn-block"
+                        onclick="findNow('station')"
+                        class="btn btn-secondary"
+                >
+                    Find Station Now
+                </button>
+
+                <h3>Station to Station</h3>
+                <select style="width:100%;" class="js-example-basic-single form-control" id="station_dd_1"
+                        name="station_dd_1">
+
                 </select>
-              <select style="width:100%;" class="js-example-basic-single form-control" id="station_dd_2" name="station_dd_1">
+                <br><br>
+                <select style="width:100%;" class="js-example-basic-single form-control" id="station_dd_2"
+                        name="station_dd_1">
                 </select>
-            <button class="btn btn-primary" onclick="return stationToStation()">Get Route!</button>
+                <br><br>
+                <button class="btn btn-primary" onclick="return stationToStation()">Get Route!</button>
             </form>
-        </form>
+        </div>
 
-      </div>
     </div>
-<input type="text" id="demo"/>
-      <button id="datetime_picker">Button</button>
 
-  </div>
-  <script src="static/js/app.js"></script>
+    <script src="static/js/app.js"></script>
 
-  <script
-    src="https://maps.googleapis.com/maps/api/js?key={{ GMAP_API }}&callback=initMap&libraries=places&v=weekly"
-    async
-  ></script>
-  {% endblock %}
+    <script
+            src="https://maps.googleapis.com/maps/api/js?key={{ GMAP_API }}&callback=initMap&libraries=places&v=weekly"
+            async
+    ></script>
+{% endblock %}
 

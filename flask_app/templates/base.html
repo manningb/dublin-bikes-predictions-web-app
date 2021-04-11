@@ -37,12 +37,12 @@
       type="text/css"
     />
     <link
-      href="{{ url_for('static', filename='css/weather-icons.min.css') }}"
+      href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.12/css/weather-icons.css"
       rel="stylesheet"
       type="text/css"
     />
     <link
-      href="{{ url_for('static', filename='css/weather-icons-wind.min.css') }}"
+      href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.12/css/weather-icons-wind.css"
       rel="stylesheet"
       type="text/css"
     />
@@ -50,12 +50,13 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jquery.datetimepicker.min.css') }}"/>
 <script src="{{ url_for('static', filename='js/jquery.datetimepicker.full.min.js') }}"></script>
+ <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
 
     {% endblock %}
   </head>
-  <body>
+  <body class="background">
     {% block navbar %}
-    <div>
+    <div >
       <div id="load"></div>
   
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -74,7 +75,7 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">Dublin Bikes Tracker</a>
+            <a class="navbar-brand" href="/"><img src="{{ url_for('static', filename='img/dublinbikeslogo.png') }}">Dublin Bikes Tracker</a>
           </div>
   
           <!-- Collect the nav links, forms, and other content for toggling -->

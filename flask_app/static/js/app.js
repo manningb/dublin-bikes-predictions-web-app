@@ -10,23 +10,21 @@ var routeBounds = false;
 var overlayWidth = 200; // Width of the overlay DIV
 var leftMargin = 30; // Grace margin to avoid too close fits on the edge of the overlay
 var rightMargin = 80; // Grace margin to avoid too close fits on the right and leave space for the controls
+var after_directions_latlng;
 
-
-$(document).ready(function() {
+$(document).ready(function () {
     $('.js-example-basic-single').select2();
     var actualDate = new Date();
-    var newDate = new Date(actualDate.getFullYear(), actualDate.getMonth(), actualDate.getDate()+13);
+    var newDate = new Date(actualDate.getFullYear(), actualDate.getMonth(), actualDate.getDate() + 13);
 
     $('#demo').datetimepicker({
-        inline:true,
-          todayHighlight: true,
-          // autoclose: true,
-          // startDate: new Date(),
-            minDate: actualDate,
-          maxDate: newDate
+        inline: true,
+        todayHighlight: true,
+        // autoclose: true,
+        // startDate: new Date(),
+        minDate: actualDate,
+        maxDate: newDate
     });
-
-
 });
 
 $('#datetime_picker').on('click', function () {
@@ -35,12 +33,86 @@ $('#datetime_picker').on('click', function () {
     console.log(d.getHours());
 });
 
+function GetLatlong() {
+  var geocoder = new google.maps.Geocoder();
+  var address = document.getElementById('searchBox').value;
+
+  geocoder.geocode({
+    'address': address
+  }, function(results, status) {
+
+    if (status == google.maps.GeocoderStatus.OK) {
+      var latitude = results[0].geometry.location.lat();
+      var longitude = results[0].geometry.location.lng();
+          myLatLng = {lat: latitude, lng: longitude}
+console.log(myLatLng);
+    }
+  });
+}
+// https://stackoverflow.com/questions/24952593/how-to-add-my-location-button-in-google-maps
+function addYourLocationButton(map, marker) {
+    var controlDiv = document.createElement('div');
+
+    var firstChild = document.createElement('button');
+    firstChild.style.backgroundColor = '#fff';
+    firstChild.style.border = 'none';
+    firstChild.style.outline = 'none';
+    firstChild.style.width = '28px';
+    firstChild.style.height = '28px';
+    firstChild.style.borderRadius = '2px';
+    firstChild.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3)';
+    firstChild.style.cursor = 'pointer';
+    firstChild.style.marginRight = '10px';
+    firstChild.style.padding = '0';
+    firstChild.title = 'Your Location';
+    controlDiv.appendChild(firstChild);
+
+    var secondChild = document.createElement('div');
+    secondChild.style.margin = '5px';
+    secondChild.style.width = '18px';
+    secondChild.style.height = '18px';
+    secondChild.style.backgroundImage = 'url(https://maps.gstatic.com/tactile/mylocation/mylocation-sprite-2x.png)';
+    secondChild.style.backgroundSize = '180px 18px';
+    secondChild.style.backgroundPosition = '0 0';
+    secondChild.style.backgroundRepeat = 'no-repeat';
+    firstChild.appendChild(secondChild);
+
+    google.maps.event.addListener(map, 'center_changed', function () {
+        secondChild.style['background-position'] = '0 0';
+    });
+
+    firstChild.addEventListener('click', function () {
+        var imgX = 0,
+            animationInterval = setInterval(function () {
+                imgX = -imgX - 18;
+                secondChild.style['background-position'] = imgX + 'px 0';
+            }, 500);
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                map.setCenter(latlng);
+                clearInterval(animationInterval);
+                secondChild.style['background-position'] = '-144px 0';
+            });
+        } else {
+            clearInterval(animationInterval);
+            secondChild.style['background-position'] = '0 0';
+        }
+    });
+
+    controlDiv.index = 1;
+    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(controlDiv);
+}
+
 function stationToStation() {
-var selectedOptionVal1 = $('#station_dd_1').find(":selected").val();
-var selectedOptionVal2 = $('#station_dd_2').find(":selected").val();
-console.log([stations[selectedOptionVal1][0],stations[selectedOptionVal1][1]],[stations[selectedOptionVal2][0],stations[selectedOptionVal2][1]]);
-calcRoute({"lat":stations[selectedOptionVal1][0],"lng":stations[selectedOptionVal1][1]},[stations[selectedOptionVal2][0],stations[selectedOptionVal2][1]]);
-    $('#overlay').css({'opacity': 100});
+    var selectedOptionVal1 = $('#station_dd_1').find(":selected").val();
+    var selectedOptionVal2 = $('#station_dd_2').find(":selected").val();
+    calcRoute({
+        "lat": stations[selectedOptionVal1][0],
+        "lng": stations[selectedOptionVal1][1]
+    }, [stations[selectedOptionVal2][0], stations[selectedOptionVal2][1]], "bike");
+    // $('#overlay').css({'opacity': 100});
     return false;
 }
 
@@ -97,6 +169,12 @@ function initMap() {
             map = new google.maps.Map(document.getElementById("map"), mapOptions);
             var searchBox = new google.maps.places.SearchBox(
                 (document.getElementById('searchBox')));
+            var myMarker = new google.maps.Marker({
+                map: map,
+                animation: google.maps.Animation.DROP,
+                position: myLatLng
+            });
+            addYourLocationButton(map, myMarker);
 
             $("#searchBox").on('keypress', function (e) {
                 // prevent form submission on pressing Enter as there could be more inputs to fill out
@@ -110,6 +188,9 @@ function initMap() {
                 map,
                 panel: document.getElementById("overlayContent")
             });
+            directionsDisplay.setMap(map);
+
+
             // Listen for the event fired when the user selects an item from the
             // pick list. Retrieve the matching places for that item.
             google.maps.event.addListener(searchBox, 'places_changed', function () {
@@ -179,12 +260,12 @@ function initMap() {
             data['station'].forEach(station => {
                 stations[station.number] = [station.position_lat, station.position_lng, station.available_bikes, station.available_bike_stands];
                 const infoWindow = new google.maps.InfoWindow({
-                    content: '<h1>' + station.address + '</h1>' + '<p>Available Bikes: ' + station.available_bikes + '</p>' + '<p>Available Bike Stands: ' + station.available_bike_stands + '</p><p>' + station.last_update + '</p>'+'<a href="stationstats-'+station.number+'">View Statistics</a>',
+                    content: '<h1>' + station.address + '</h1>' + '<p>Available Bikes: ' + station.available_bikes + '</p>' + '<p>Available Bike Stands: ' + station.available_bike_stands + '</p><p>' + station.last_update + '</p>' + '<a href="stationstats-' + station.number + '">View Statistics</a>',
                 });
 
-                $("#station_dd_1").append("<option value='"+station.number+"'>"+station.number + ": "+station.address+"</option>")
-                $("#station_dd_2").append("<option value='"+station.number+"'>"+station.number + ": "+station.address+"</option>")
-                  var availability_percentage = parseInt(station.available_bikes)/(parseInt(station.available_bikes)+parseInt(station.available_bike_stands));
+                $("#station_dd_1").append("<option value='" + station.number + "'>" + station.number + ": " + station.address + "</option>")
+                $("#station_dd_2").append("<option value='" + station.number + "'>" + station.number + ": " + station.address + "</option>")
+                var availability_percentage = parseInt(station.available_bikes) / (parseInt(station.available_bikes) + parseInt(station.available_bike_stands));
                 if (availability_percentage > .7) {
                     color = "green";
                 } else if (availability_percentage > .3) {
@@ -193,14 +274,14 @@ function initMap() {
                     color = "red";
                 }
                 let url = "http://maps.google.com/mapfiles/ms/icons/";
-                  url += color + "-dot.png";
+                url += color + "-dot.png";
                 console.log(url);
                 const marker = new google.maps.Marker({
                     position: {lat: station.position_lat, lng: station.position_lng},
                     map,
                     icon: {
-                          url: url
-                        },
+                        url: url
+                    },
                     title: station.address,
                 });
 
@@ -226,24 +307,13 @@ function initMap() {
 
         }
     )
-    /*
-        var searchBox = new google.maps.places.SearchBox(document.getElementById('searchBox'));
-        const options = {
-            componentRestrictions: {country: "ie"}
-        };
-        const autocomplete = new google.maps.places.Autocomplete(searchBox, options);
-        autocomplete.bindTo("bounds", map);
-    */
-
-    //directionsDisplay.setMap(map);
 }
 
 function findNow(bike_or_station) {
     num = calcDist(bike_or_station);
     myClick(num);
-    calcRoute(myLatLng, [stations[num][0], stations[num][1]]);
-    $('#overlay').css({'opacity': 100});
-
+    calcRoute(myLatLng, [stations[num][0], stations[num][1]], bike_or_station);
+    // $('#overlay').css({'opacity': 100});
 }
 
 function distance_func(lat1, lon1, lat2, lon2) {
@@ -275,7 +345,7 @@ function calcDist(bike_or_station) {
     }
     dist = sort_object(dist);
     num = dist[0][0];
-    $("#success-alert").append("Bike Station Found!").fadeTo(2000, 500).slideUp(500, function () {
+    $("#success-alert").html("Bike Station Found!").fadeTo(2000, 500).slideUp(500, function () {
         $("#success-alert").slideUp(500);
     });
 
@@ -362,20 +432,47 @@ function fromLatLngToPoint(latLng) {
     return new google.maps.Point(Math.floor((worldCoordinate.x - worldCoordinateNW.x) * scale), Math.floor((worldCoordinate.y - worldCoordinateNW.y) * scale));
 }
 
-function calcRoute(start, end) {
+function calcRoute(start, end, type) {
     start = new google.maps.LatLng(start["lat"], start["lng"]);
     end = new google.maps.LatLng(end[0], end[1]);
-
-
+    after_directions_latlng = end;
+    if (type == "bike") {
+        travel_mode = google.maps.DirectionsTravelMode.BICYCLING;
+    } else {
+        travel_mode = google.maps.DirectionsTravelMode.TRANSIT;
+    }
     var request = {
         origin: start,
         destination: end,
-        travelMode: google.maps.DirectionsTravelMode.BICYCLING
+        travelMode: travel_mode
     };
 
     directionsService.route(request, function (response, status) {
         if (status === google.maps.DirectionsStatus.OK) {
             directionsDisplay.setDirections(response);
+            directionsDisplay.setMap(map);
+            if ($('#overlay').length) {
+                // pass;
+            } else {
+                $('#left_col').append("" +
+                    "            <div id=\"overlay\">\n" +
+                    "                <span id='close'\n" +
+                    "                      onClick='this.parentNode.parentNode.removeChild(this.parentNode);  return false;'>x</span>\n" +
+                    "                <div id=\"overlayContent\"></div>\n" +
+                    "            </div>\n"
+                );
+                $('#close').on('click', function () {
+                    directionsDisplay.setMap(null);
+                    directionsDisplay.setPanel(null);
+                    map.setZoom(15);
+                    map.setCenter(after_directions_latlng);
+                });
+
+
+                directionsDisplay.setPanel(document.getElementById("overlayContent"));
+
+            }
+
             // Define route bounds for use in offsetMap function
             routeBounds = response.routes[0].bounds;
 
