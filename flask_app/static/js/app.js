@@ -25,6 +25,7 @@ $(document).ready(function () {
         minDate: actualDate,
         maxDate: newDate
     });
+
 });
 
 $('#datetime_picker').on('click', function () {
@@ -454,8 +455,8 @@ function calcRoute(start, end, type) {
             if ($('#overlay').length) {
                 // pass;
             } else {
-                $('#left_col').append("" +
-                    "            <div id=\"overlay\">\n" +
+                $('#card').append("" +
+                    "            <div class='card' id=\"overlay\">\n" +
                     "                <span id='close'\n" +
                     "                      onClick='this.parentNode.parentNode.removeChild(this.parentNode);  return false;'>x</span>\n" +
                     "                <div id=\"overlayContent\"></div>\n" +

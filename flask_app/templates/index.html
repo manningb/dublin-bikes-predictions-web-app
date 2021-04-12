@@ -38,9 +38,14 @@
     {{ super() }}
     <div id="contents">
         <div id="left_col" class="col-md-9">
-            <div id="map"></div>
+            <div  id="card" class="card">
+{#                    <h3 class="card-title">Map</h3>#}
+
+                            <div id="map"></div>
             <!-- For displaying user's coordinate or error message. -->
             <div id="info" class="info"></div>
+            </div>
+
         </div>
         <div class="col-md-3">
             <div
@@ -53,7 +58,7 @@
             overflow-x: hidden;
           "
             >
-                <div class="list-group" id="bikes_list"></div>
+                <div class="list-group " id="bikes_list"></div>
             </div>
             <h3>Set Current Location</h3>
             <div class="input-group mb-11">
