@@ -79,7 +79,7 @@
                 <button
                         style="width: 45%;"
                         type="button btn-block"
-                        onclick="findNow('bike')"
+                        onclick="return findNow('bike')"
                         class="btn btn-primary"
                 >
                     Find Bike Now
@@ -88,12 +88,11 @@
                         style="width: 45%;"
 
                         type="button btn-block"
-                        onclick="findNow('station')"
+                        onclick="return findNow('station')"
                         class="btn btn-secondary"
                 >
                     Find Station Now
                 </button>
-
                 <h3>Station to Station</h3>
                 <select style="width:100%;" class="js-example-basic-single form-control" id="station_dd_1"
                         name="station_dd_1">

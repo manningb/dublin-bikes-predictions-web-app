@@ -12,27 +12,45 @@ var leftMargin = 30; // Grace margin to avoid too close fits on the edge of the 
 var rightMargin = 80; // Grace margin to avoid too close fits on the right and leave space for the controls
 var after_directions_latlng;
 
-$(document).ready(function () {
-    $('.js-example-basic-single').select2();
-    var actualDate = new Date();
-    var newDate = new Date(actualDate.getFullYear(), actualDate.getMonth(), actualDate.getDate() + 13);
 
-    $('#demo').datetimepicker({
-        inline: true,
-        todayHighlight: true,
-        // autoclose: true,
-        // startDate: new Date(),
-        minDate: actualDate,
-        maxDate: newDate
-    });
-
-});
 
 $('#datetime_picker').on('click', function () {
     var d = $('#demo').datetimepicker('getValue');
     console.log(d.getDay());
     console.log(d.getHours());
 });
+
+
+function displayLocation(latitude,longitude){
+    var geocoder;
+    geocoder = new google.maps.Geocoder();
+    var latlng = new google.maps.LatLng(latitude, longitude);
+
+    geocoder.geocode(
+        {'latLng': latlng},
+        function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                if (results[0]) {
+                    var add= results[0].formatted_address ;
+                    var  value=add.split(",");
+
+                    count=value.length;
+                    country=value[count-1];
+                    state=value[count-2];
+                    city=value[count-3];
+                    return "city name is: " + city;
+                }
+                else  {
+                    return "address not found";
+                }
+            }
+            else {
+                return "Geocoder failed due to: " + status;
+            }
+        }
+    );
+}
+
 
 function GetLatlong() {
   var geocoder = new google.maps.Geocoder();
@@ -47,6 +65,8 @@ function GetLatlong() {
       var longitude = results[0].geometry.location.lng();
           myLatLng = {lat: latitude, lng: longitude}
 console.log(myLatLng);
+          $info.textContent = `Current Location changed!`;
+
     }
   });
 }
@@ -244,7 +264,7 @@ function initMap() {
                     myLatLng = {lat: lat, lng: lng};
 
                     // Print out the user's location.
-                    $info.textContent = `Current Location Found! Lat: ${lat} Lng: ${lng}`;
+                    $info.textContent = `Current Location Found!`;
                     // Don't forget to remove any error class name.
                     $info.classList.remove('error');
                     $info.classList.add('success');
@@ -315,6 +335,7 @@ function findNow(bike_or_station) {
     myClick(num);
     calcRoute(myLatLng, [stations[num][0], stations[num][1]], bike_or_station);
     // $('#overlay').css({'opacity': 100});
+    return false;
 }
 
 function distance_func(lat1, lon1, lat2, lon2) {
@@ -506,3 +527,19 @@ function calcRoute(start, end, type) {
         }
     });
 }
+
+$(document).ready(function () {
+    $('.js-example-basic-single').select2();
+    var actualDate = new Date();
+    var newDate = new Date(actualDate.getFullYear(), actualDate.getMonth(), actualDate.getDate() + 13);
+
+    $('#demo').datetimepicker({
+        inline: true,
+        todayHighlight: true,
+        // autoclose: true,
+        // startDate: new Date(),
+        minDate: actualDate,
+        maxDate: newDate
+    });
+
+});

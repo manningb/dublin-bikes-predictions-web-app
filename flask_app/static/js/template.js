@@ -1,4 +1,5 @@
 document.onreadystatechange = function () {
+  loopThroughStations();
   var state = document.readyState;
   if (state === "interactive") {
     document.getElementById("contents").style.visibility = "hidden";
@@ -15,7 +16,23 @@ function msToBeaufort(ms) {
   return Math.ceil(Math.cbrt(Math.pow(ms / 0.836, 2)));
 }
 
+function loopThroughStations () {
+fetch('static/js/static_bikes.json')
+  .then(response => response.json())
+  .then(data => {
+    data.sort(function (a, b) {
+    return a.number > b.number;
+});
+
+  	// Do something with your data
+  	    data.forEach((element) => {
+      $("#station_dd_3").append("<option value='/stationstats-" + element.number + "'>" + element.number + ": " + element.address + "</option>")
+    });
+  });
+}
+
 window.onload = function () {
+
   fetch("/current_weather")
     .then((response) => {
       return response.json();
