@@ -477,7 +477,7 @@ function calcRoute(start, end, type) {
                 // pass;
             } else {
                 $('#card').append("" +
-                    "            <div class='card' id=\"overlay\">\n" +
+                    "            <div class='card' id=\"overlay\">\n" + "<button onclick='PrintElem()'>Print Directions</button>" +
                     "                <span id='close'\n" +
                     "                      onClick='this.parentNode.parentNode.removeChild(this.parentNode);  return false;'>x</span>\n" +
                     "                <div id=\"overlayContent\"></div>\n" +
@@ -543,3 +543,61 @@ $(document).ready(function () {
     });
 
 });
+
+// function PrintElem()
+// {
+//     elem = "card";
+//     var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+//
+//     mywindow.document.write('<html><head><title>' + document.title  + '</title>');
+//     mywindow.document.write('</head><body >');
+//     mywindow.document.write('<h1>' + document.title  + '</h1>');
+//     mywindow.document.write(document.getElementById(elem).innerHTML);
+//     mywindow.document.write('</body></html>');
+//
+//     mywindow.document.close(); // necessary for IE >= 10
+//     mywindow.focus(); // necessary for IE >= 10*/
+//
+//     mywindow.print();
+//     // mywindow.close();
+//
+//     return true;
+// }
+
+// printAnyMaps ::
+function PrintElem() {
+  const $body = $('body');
+  const $mapContainer = $('#card');
+  const $mapContainerParent = $mapContainer.parent();
+  const $printContainer = $('<div style="position:absolute;">');
+
+  $printContainer
+    .height($mapContainer.height())
+    .append($mapContainer)
+    .prependTo($body);
+
+  const $content = $body
+    .children()
+    .not($printContainer)
+    .not('script')
+    .detach();
+
+  /**
+   * Needed for those who use Bootstrap 3.x, because some of
+   * its `@media print` styles ain't play nicely when printing.
+   */
+  const $patchedStyle = $('<style media="print">')
+    .text(`
+      img { max-width: none !important; }
+      a[href]:after { content: ""; }
+    `)
+    .appendTo('head');
+
+  window.print();
+
+  $body.prepend($content);
+  $mapContainerParent.prepend($mapContainer);
+
+  $printContainer.remove();
+  $patchedStyle.remove();
+}
