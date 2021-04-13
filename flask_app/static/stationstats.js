@@ -1,6 +1,8 @@
 //(number);
 
 google.charts.load("current", { packages: ["corechart", "gauge", "calendar"] });
+google.charts.setOnLoadCallback(LoadCharts);
+
 var Myarr;
 var stations;
 var bikestands;
@@ -20,8 +22,14 @@ xmlhttp.onreadystatechange = function () {
   }
 };
 
-xmlhttp.open("GET", "static/static_bikes.json", true);
+xmlhttp.open("GET", "static/js/static_bikes.json", true);
 xmlhttp.send();
+
+function LoadCharts() {
+  fetchStation(number);
+  fetch48(number);
+  fetchAverage(number);
+}
 
 function fetch48(number) {
   fetch("/hour48-" + number)
@@ -33,23 +41,34 @@ function fetch48(number) {
       var arr = [];
       var predictbikes = [];
       for (var date in data) {
-        arr.push([date, data[date]]);
-        predictbikes.push([date, bikestands - data[date]]);
-        predictvals.push([date, data[date], bikestands - data[date]]);
+        var bikes = bound(data[date]);
+        var stations = bound(bikestands - data[date]);
+        arr.push([date, bikes]);
+        predictbikes.push([date, stations]);
+        predictvals.push([date, bikes, stations]);
       }
       //(arr);
       var graphdata = new google.visualization.DataTable();
       graphdata.addColumn("string", "time_queried");
       graphdata.addColumn("number", "available_bike_stands");
       graphdata.addRows(arr);
-      google.charts.setOnLoadCallback(drawChart48hr(graphdata));
+      drawChart48hr(graphdata);
       var graphdatabikes = new google.visualization.DataTable();
       graphdatabikes.addColumn("string", "time_queried");
       graphdatabikes.addColumn("number", "available_bikes");
       graphdatabikes.addRows(predictbikes);
-      google.charts.setOnLoadCallback(drawChart48hrbikes(graphdatabikes));
+      drawChart48hrbikes(graphdatabikes);
       populatedays();
     });
+}
+
+function bound(val) {
+  if (val < 0) {
+    val = 0;
+  } else if (val > bikestands) {
+    val = bikestands;
+  }
+  return val;
 }
 
 function fetchAverage(number) {
@@ -59,8 +78,8 @@ function fetchAverage(number) {
     })
     .then((data) => {
       //("data: ", data);
-      google.charts.setOnLoadCallback(drawCalAvailBikeStation(data));
-      google.charts.setOnLoadCallback(drawCalAvailBikes(data));
+      drawCalAvailBikeStation(data);
+      drawCalAvailBikes(data);
     });
 }
 
@@ -109,18 +128,16 @@ function fetchStation(number) {
       //.log(availablestations);
       graphbikes.addRows(availablebikes);
       graphstations.addRows(availablestations);
-      google.charts.setOnLoadCallback(drawPieChart(pieData));
-      google.charts.setOnLoadCallback(drawChart(graphbikes));
-      google.charts.setOnLoadCallback(drawChart2(graphstations));
+      drawPieChart(pieData);
+      drawChart(graphbikes);
+      drawChart2(graphstations);
     });
 }
-fetchStation(number);
-fetch48(number);
-fetchAverage(number);
 
 function drawChart(data) {
+  // the following is based on the code from https://developers.google.com/chart/interactive/docs/gallery/linechart
   var options = {
-    title: "Available Bikes",
+    title: "Historical Available Bikes",
     legend: { position: "bottom" },
     colors: ["red"],
   };
@@ -133,8 +150,9 @@ function drawChart(data) {
 }
 
 function drawChart2(data) {
+  // the following is based on the code from https://developers.google.com/chart/interactive/docs/gallery/linechart
   var options = {
-    title: "Available Bike Stands",
+    title: "Historical Available Bike Stands",
     legend: { position: "bottom" },
   };
 
@@ -146,6 +164,7 @@ function drawChart2(data) {
 }
 
 function drawChart48hr(data) {
+  // the following is based on the code from https://developers.google.com/chart/interactive/docs/gallery/linechart
   var options = {
     title: "Predicted Available Bike Stands",
     legend: { position: "bottom" },
@@ -159,6 +178,7 @@ function drawChart48hr(data) {
 }
 
 function drawChart48hrbikes(data) {
+  // the following is based on the code from https://developers.google.com/chart/interactive/docs/gallery/linechart
   var options = {
     title: "Predicted Available Bikes",
     legend: { position: "bottom" },
@@ -173,6 +193,7 @@ function drawChart48hrbikes(data) {
 }
 
 function drawPieChart(pieData) {
+  // the following is based on the code provided on https://developers.google.com/chart/interactive/docs/gallery/piechart#donut
   //(pieData);
   var data = pieData;
 
@@ -263,6 +284,6 @@ function populatepredict() {
     }
   });
   //.log(prebikes);
-  document.getElementById("predbikes").innerHTML = prebikes.toFixed(2);
-  document.getElementById("predstation").innerHTML = prestations.toFixed(2);
+  document.getElementById("predbikes").innerHTML = Math.round(prebikes);
+  document.getElementById("predstation").innerHTML = Math.round(prestations);
 }

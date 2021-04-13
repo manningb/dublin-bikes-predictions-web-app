@@ -11,6 +11,13 @@ body,
   padding: 0;
   height: 100%;
   width: 100%;
+  font-family: 'Inter', sans-serif;
+}
+
+.background {
+background: rgb(255, 255, 255);
+background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(0,146,197,1) 100%);
+
 }
 
 #weatherScroll {
@@ -63,7 +70,8 @@ body,
 
 #map {
   width: 100%;
-  height: 85vh;
+  height: 75vh;
+  border-radius:  0.5rem;
 }
 
 body {
@@ -112,15 +120,27 @@ h2 {
   background-size: 30vh;
 }
 
+.navbar .navbar-brand {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+}
+.navbar-brand img {
+  height: 100%;
+  margin-right: 20px;
+}
+
+
 #overlay {
   position: absolute;
   width: 20vw;
-  height: 80vh;
-  background: white;
-  opacity: 0;
+  height: 100%;
+  /*background: white;*/
   top: 0;
   left: 0;
   overflow: auto;
+    padding: .5rem;
+
 }
 
 #overlayContent {
@@ -131,6 +151,24 @@ h2 {
 #overlayContent p {
   font-size: 12px;
   margin: 6px 0;
+}
+
+#close {
+    float:right;
+    display:inline-block;
+    padding:2px 5px;
+    background:#ccc;
+    border-radius: 0.5rem;
+
+}
+
+#close:hover {
+    float:right;
+    display:inline-block;
+    padding:2px 5px;
+    background:#ccc;
+    color:#fff;
+  cursor: pointer;
 }
 
 small {
@@ -191,4 +229,41 @@ small {
 .chart {
   margin-top: 25px;
   height: 350px;
+}
+.cal-col {
+  width: 100%;
+}
+.cal {
+  width: 1000px;
+  margin: auto;
+  padding-top: 50px;
+}
+
+.card {
+  height: auto;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  	/* other styles */
+	background: rgba(255, 255, 255, .7);
+	-webkit-backdrop-filter: blur(10px);
+	backdrop-filter: blur(10px);
+  /*position: absolute;*/
+  top: .5rem;
+  left: .5rem;
+
+}
+
+.card-title {
+  margin-top: 0;
+  margin-bottom: .5rem;
+  font-size: 1.2rem;
+}
+
+/*p, a {*/
+/*  font-size: 3rem;*/
+/*}*/
+
+a {
+  color: #4d4ae8;
+  text-decoration: none;
 }
