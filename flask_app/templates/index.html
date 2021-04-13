@@ -1,54 +1,56 @@
 {% extends "base.html" %}
 
 
-  {% block head %} {{ super() }}
+{% block head %} {{ super() }}
 
-  <script type="text/javascript">
-    $(document).ready(function () {
-      var speed = 5;
-      var items,
-        scroller = $("#scroller");
-      var width = 0;
-      scroller.children().each(function () {
-        width += $(this).outerWidth(true);
-      });
-      scroller.css("width", width);
-      scroll();
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var speed = 5;
+            var items,
+                scroller = $("#scroller");
+            var width = 0;
+            scroller.children().each(function () {
+                width += $(this).outerWidth(true);
+            });
+            scroller.css("width", width);
+            scroll();
 
-      function scroll() {
-        items = scroller.children();
-        var scrollWidth = items.eq(0).outerWidth();
-        scroller.animate(
-          { left: 0 - scrollWidth },
-          (scrollWidth * 100) / speed,
-          "linear",
-          changeFirst
-        );
-      }
+            function scroll() {
+                items = scroller.children();
+                var scrollWidth = items.eq(0).outerWidth();
+                scroller.animate(
+                    {left: 0 - scrollWidth},
+                    (scrollWidth * 100) / speed,
+                    "linear",
+                    changeFirst
+                );
+            }
 
-      function changeFirst() {
-        scroller.append(items.eq(0).remove()).css("left", 0);
-        scroll();
-      }
-    });
-  </script>
-  {% endblock %}
+            function changeFirst() {
+                scroller.append(items.eq(0).remove()).css("left", 0);
+                scroll();
+            }
+        });
+    </script>
+{% endblock %}
 
   {% block navbar %}
   {{ super() }}
 
     <div id="contents">
-      <div class="col-md-9">
-        <div id="map"></div>
-        <div id="overlay">
-          <div id="overlayContent"></div>
+        <div id="left_col" class="col-md-9">
+            <div  id="card" class="card">
+{#                    <h3 class="card-title">Map</h3>#}
+
+                            <div id="map"></div>
+            <!-- For displaying user's coordinate or error message. -->
+            <div id="info" class="info"></div>
+            </div>
+
         </div>
-        <!-- For displaying user's coordinate or error message. -->
-        <div id="info" class="info"></div>
-      </div>
-      <div class="col-md-3">
-        <div
-          style="
+        <div class="col-md-3">
+            <div
+                    style="
             max-width: 100%;
             max-height: 40vh;
             margin-bottom: 10px;
@@ -56,102 +58,63 @@
             -webkit-overflow-scrolling: touch;
             overflow-x: hidden;
           "
-        >
-          <div class="list-group" id="bikes_list"></div>
-        </div>
-        <form style="width: 100%; height: 40vh">
-          <button
-            type="button"
-            onclick="findNow('bike')"
-            class="btn btn-primary"
-          >
-            Find Bike Now
-          </button>
-          <button
-            type="button"
-            onclick="findNow('station')"
-            class="btn btn-secondary"
-          >
-            Find Station Now
-          </button>
-          <div class="form-group">
-            <label
-              for="searchBox"
-              class="controls"
-              type="text"
-              placeholder="Search Box"
-              >Search Box</label
             >
-            <input
-              id="searchBox"
-              class="form-control"
-              placeholder="O'Connell St. Dublin"
-            />
-          </div>
-          {#
-          <div class="form-group">
-            #} {#
-            <label for="exampleFormControlSelect1">Example select</label>#} {#
-            <select class="form-control" id="exampleFormControlSelect1">
-              #} {#
-              <option>1</option>
-              #} {#
-              <option>2</option>
-              #} {#
-              <option>3</option>
-              #} {#
-              <option>4</option>
-              #} {#
-              <option>5</option>
-              #} {#</select
-            >#} {#
-          </div>
-          #} {#
-          <div class="form-group">
-            #} {#
-            <label for="exampleFormControlSelect2"
-              >Example multiple select</label
-            >#} {#
-            <select
-              multiple
-              class="form-control"
-              id="exampleFormControlSelect2"
-            >
-              #} {#
-              <option>1</option>
-              #} {#
-              <option>2</option>
-              #} {#
-              <option>3</option>
-              #} {#
-              <option>4</option>
-              #} {#
-              <option>5</option>
-              #} {#</select
-            >#} {#
-          </div>
-          #} {#
-          <div class="form-group">
-            #} {#
-            <label for="exampleFormControlTextarea1">Example textarea</label>#}
-            {#
-            <textarea
-              class="form-control"
-              id="exampleFormControlTextarea1"
-              rows="3"
-            ></textarea
-            >#} {#
-          </div>
-          #}
-        </form>
-      </div>
-    </div>
-  </div>
-  <script src="static/js/app.js"></script>
+                <div class="list-group " id="bikes_list"></div>
+            </div>
+            <h3>Set Current Location</h3>
+            <div class="input-group mb-11">
+                <input
+                        id="searchBox"
+                        class="form-control"
+                        placeholder="O'Connell St. Dublin"
+                />
+                <span role="button"
+                      onclick="GetLatlong()"
+                      class="input-group-addon"
+                >
+                    Set Location
+                </span>
+            </div>
+            <br>
+            <form class="text-center " style="width: 100%; height: 40vh">
+                <button
+                        style="width: 45%;"
+                        type="button btn-block"
+                        onclick="return findNow('bike')"
+                        class="btn btn-primary"
+                >
+                    Find Bike Now
+                </button>
+                <button
+                        style="width: 45%;"
 
-  <script
-    src="https://maps.googleapis.com/maps/api/js?key={{ GMAP_API }}&callback=initMap&libraries=places&v=weekly"
-    async
-  ></script>
-  {% endblock %}
+                        type="button btn-block"
+                        onclick="return findNow('station')"
+                        class="btn btn-secondary"
+                >
+                    Find Station Now
+                </button>
+                <h3>Station to Station</h3>
+                <select style="width:100%;" class="js-example-basic-single form-control" id="station_dd_1"
+                        name="station_dd_1">
+
+                </select>
+                <br><br>
+                <select style="width:100%;" class="js-example-basic-single form-control" id="station_dd_2"
+                        name="station_dd_1">
+                </select>
+                <br><br>
+                <button class="btn btn-primary" onclick="return stationToStation()">Get Route!</button>
+            </form>
+        </div>
+
+    </div>
+
+    <script src="static/js/app.js"></script>
+
+    <script
+            src="https://maps.googleapis.com/maps/api/js?key={{ GMAP_API }}&callback=initMap&libraries=places&v=weekly"
+            async
+    ></script>
+{% endblock %}
 

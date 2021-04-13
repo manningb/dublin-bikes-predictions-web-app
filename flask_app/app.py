@@ -43,6 +43,41 @@ def sql_query(query):
     engine.dispose()
     return rows
 
+@app.route("/one_hour-<int:bike_station_num>-<int:day_num>-<int:hour_num>")
+def one_hour(bike_station_num, day_num, hour_num):
+    model = joblib.load(f'../data_analytics/pickles/station-{bike_station_num}')
+    features = ['temp',  'humidity', 'wind_speed', 'dayquery_Friday', 'dayquery_Monday', 'dayquery_Saturday', 'dayquery_Sunday', 'dayquery_Thursday',
+ 'dayquery_Tuesday', 'dayquery_Wednesday', 'weather_main_Clear', 'weather_main_Clouds', 'weather_main_Drizzle', 'weather_main_Fog', 'weather_main_Mist', 'weather_main_Rain']
+
+    DB_USER = os.environ.get("DB_USER")
+    DB_PASS = os.environ.get("DB_PASS")
+    DB_URL = os.environ.get("DB_URL")
+
+    engine = create_engine("mysql+pymysql://{0}:{1}@{2}".format(DB_USER, DB_PASS, DB_URL), echo=True)
+    connection = engine.connect()
+
+    statement = f"""SELECT last_update, dayname(last_update) as dayquery, hour(last_update) as hourquery, temp, humidity, wind_speed, weather_main FROM dublin_bikes.weather_forecast_1hour
+    where station_number = {bike_station_num} AND 
+    order by time_queried desc, last_update
+    limit 1;"""
+    sql_query(statement)
+    df_future = pd.read_sql_query(statement, engine)
+    categorical_columns = df_future[['dayquery', 'hourquery', 'weather_main', 'dayquery', 'hourquery']].columns
+    # Convert data type to category for these columns
+    for column in categorical_columns:
+        df_future[column] = df_future[column].astype('category')
+
+    df_future["humidity"] = df_future["humidity"].fillna(0)
+    df_final_future = pd.get_dummies(df_future, drop_first=False)
+    for col in features:
+        if col not in df_final_future.columns:
+            df_final_future[col] = [0 for i in range(len(df_final_future))]
+    result = model.predict(df_final_future[features])
+    dictionary = dict(zip(df_final_future["last_update"].astype(str).to_list(), result.tolist()))
+    connection.close()
+    engine.dispose()
+    return jsonify(dictionary)
+
 @app.route("/hour48-<int:number>")
 def hour48(number):
     model = joblib.load(f'../data_analytics/pickles/station-{number}.pkl')
