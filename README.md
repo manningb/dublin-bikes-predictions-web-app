@@ -7,7 +7,7 @@
 ***
 ***
 *** To avoid retyping too much info. Do a search and replace for the following:
-*** github_username, repo_name, twitter_handle, email, project_title, project_description
+*** manningb, dublin_bikes, twitter_handle, brian.manning@ucdconnect.ie, Dublin Bikes, project_description
 -->
 
 <!-- PROJECT SHIELDS -->
@@ -29,8 +29,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/github_username/repo_name">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+  <a href="https://github.com/manningb/dublin_bikes">
+    <img src="https://github.com/manningb/dublin_bikes/blob/main/flask_app/static/img/loading.gif" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Dublin Bikes</h3>
@@ -84,7 +84,7 @@
 
 Here's a blank template to get started:
 **To avoid retyping too much info. Do a search and replace with your text editor for the following:**
-`github_username`, `repo_name`, `twitter_handle`, `email`, `project_title`, `project_description`
+`manningb`, `dublin_bikes`, `twitter_handle`, `brian.manning@ucdconnect.ie`, `Dublin Bikes`, `project_description`
 
 ### Built With
 
@@ -112,7 +112,7 @@ This is an example of how to list things you need to use the software and how to
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/github_username/repo_name.git
+   git clone https://github.com/manningb/dublin_bikes.git
    ```
 2. Install NPM packages
    ```sh
@@ -131,7 +131,7 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 
 ## Roadmap
 
-See the [open issues](https://github.com/github_username/repo_name/issues) for a list of proposed features (and known issues).
+See the [open issues](https://github.com/manningb/dublin_bikes/issues) for a list of proposed features (and known issues).
 
 <!-- CONTRIBUTING -->
 
@@ -155,9 +155,9 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email
+Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - brian.manning@ucdconnect.ie
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
+Project Link: [https://github.com/manningb/dublin_bikes](https://github.com/manningb/dublin_bikes)
 
 <!-- ACKNOWLEDGEMENTS -->
 
@@ -172,13 +172,13 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 
 [contributors-shield]: https://img.shields.io/github/contributors/manningb/repo.svg?style=for-the-badge&logo=appveyor
 [contributors-url]: https://github.com/manningb/dublin_bikes/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/github_username/repo.svg?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/manningb/repo.svg?style=for-the-badge
 [forks-url]: https://github.com/manningb/dublin_bikes/network/members
-[stars-shield]: https://img.shields.io/github/stars/github_username/repo.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/manningb/repo.svg?style=for-the-badge
 [stars-url]: https://github.com/manningb/dublin_bikes/stargazers
-[issues-shield]: https://img.shields.io/github/issues/github_username/repo.svg?style=for-the-badge
+[issues-shield]: https://img.shields.io/github/issues/manningb/repo.svg?style=for-the-badge
 [issues-url]: https://github.com/manningb/dublin_bikes/issues
-[license-shield]: https://img.shields.io/github/license/github_username/repo.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/manningb/repo.svg?style=for-the-badge
 [license-url]: https://github.com/manningb/dublin_bikes/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/github_username
+[linkedin-url]: https://linkedin.com/in/manningb
