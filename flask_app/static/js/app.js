@@ -13,38 +13,35 @@ var rightMargin = 80; // Grace margin to avoid too close fits on the right and l
 var after_directions_latlng;
 
 
-
 $('#datetime_picker').on('click', function () {
     var d = $('#demo').datetimepicker('getValue');
-    console.log(d.getDay());
-    console.log(d.getHours());
+    // console.log(d.getDay());
+    // console.log(d.getHours());
 });
 
 
-function displayLocation(latitude,longitude){
+function displayLocation(latitude, longitude) {
     var geocoder;
     geocoder = new google.maps.Geocoder();
     var latlng = new google.maps.LatLng(latitude, longitude);
 
     geocoder.geocode(
         {'latLng': latlng},
-        function(results, status) {
+        function (results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
                 if (results[0]) {
-                    var add= results[0].formatted_address ;
-                    var  value=add.split(",");
+                    var add = results[0].formatted_address;
+                    var value = add.split(",");
 
-                    count=value.length;
-                    country=value[count-1];
-                    state=value[count-2];
-                    city=value[count-3];
+                    count = value.length;
+                    country = value[count - 1];
+                    state = value[count - 2];
+                    city = value[count - 3];
                     return "city name is: " + city;
-                }
-                else  {
+                } else {
                     return "address not found";
                 }
-            }
-            else {
+            } else {
                 return "Geocoder failed due to: " + status;
             }
         }
@@ -53,25 +50,26 @@ function displayLocation(latitude,longitude){
 
 
 function GetLatlong() {
-  var geocoder = new google.maps.Geocoder();
-  var address = document.getElementById('searchBox').value;
+    var geocoder = new google.maps.Geocoder();
+    var address = document.getElementById('searchBox').value;
 
-  geocoder.geocode({
-    'address': address
-  }, function(results, status) {
+    geocoder.geocode({
+        'address': address
+    }, function (results, status) {
 
-    if (status == google.maps.GeocoderStatus.OK) {
-      var latitude = results[0].geometry.location.lat();
-      var longitude = results[0].geometry.location.lng();
-          myLatLng = {lat: latitude, lng: longitude}
-console.log(myLatLng);
-          $info.textContent = `Current Location changed!`;
+        if (status == google.maps.GeocoderStatus.OK) {
+            var latitude = results[0].geometry.location.lat();
+            var longitude = results[0].geometry.location.lng();
+            myLatLng = {lat: latitude, lng: longitude}
+            // console.log(myLatLng);
+            $info.textContent = `Current Location changed!`;
 
-    }
-  });
+        }
+    });
 }
+
 // https://stackoverflow.com/questions/24952593/how-to-add-my-location-button-in-google-maps
-function addYourLocationButton(map, marker) {
+function addYourLocationButton(map) {
     var controlDiv = document.createElement('div');
 
     var firstChild = document.createElement('button');
@@ -112,6 +110,8 @@ function addYourLocationButton(map, marker) {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
                 var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                myLatLng = {lat: position.coords.latitude, lng: position.coords.longitude};
+
                 map.setCenter(latlng);
                 clearInterval(animationInterval);
                 secondChild.style['background-position'] = '-144px 0';
@@ -190,12 +190,7 @@ function initMap() {
             map = new google.maps.Map(document.getElementById("map"), mapOptions);
             var searchBox = new google.maps.places.SearchBox(
                 (document.getElementById('searchBox')));
-            var myMarker = new google.maps.Marker({
-                map: map,
-                animation: google.maps.Animation.DROP,
-                position: myLatLng
-            });
-            addYourLocationButton(map, myMarker);
+            addYourLocationButton(map);
 
             $("#searchBox").on('keypress', function (e) {
                 // prevent form submission on pressing Enter as there could be more inputs to fill out
@@ -252,13 +247,14 @@ function initMap() {
                 searchBox.setBounds(bounds);
             });
 
-            const current_marker = new google.maps.Marker({
-                position: {lat: 53.3531, lng: -6.2580},
-                icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
-                map
-            });
+
             trackLocation({
                 onSuccess: ({coords: {latitude: lat, longitude: lng}}) => {
+                    let current_marker = new google.maps.Marker({
+                        position: {lat: lat, lng: lng},
+                        icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+                        map
+                    });
                     current_marker.setPosition({lat, lng});
                     map.panTo({lat, lng});
                     myLatLng = {lat: lat, lng: lng};
@@ -296,7 +292,7 @@ function initMap() {
                 }
                 let url = "http://maps.google.com/mapfiles/ms/icons/";
                 url += color + "-dot.png";
-                console.log(url);
+                // console.log(url);
                 const marker = new google.maps.Marker({
                     position: {lat: station.position_lat, lng: station.position_lng},
                     map,
@@ -515,7 +511,7 @@ function calcRoute(start, end, type) {
 
                 // Update route bounds
                 routeBounds = updatedResponse.routes[0].bounds;
-                console.log(routeBounds);
+                // console.log(routeBounds);
                 // Fit updated bounds
                 map.fitBounds(routeBounds);
 
@@ -566,38 +562,38 @@ $(document).ready(function () {
 
 // printAnyMaps ::
 function PrintElem() {
-  const $body = $('body');
-  const $mapContainer = $('#card');
-  const $mapContainerParent = $mapContainer.parent();
-  const $printContainer = $('<div style="position:absolute;">');
+    const $body = $('body');
+    const $mapContainer = $('#card');
+    const $mapContainerParent = $mapContainer.parent();
+    const $printContainer = $('<div style="position:absolute;">');
 
-  $printContainer
-    .height($mapContainer.height())
-    .append($mapContainer)
-    .prependTo($body);
+    $printContainer
+        .height($mapContainer.height())
+        .append($mapContainer)
+        .prependTo($body);
 
-  const $content = $body
-    .children()
-    .not($printContainer)
-    .not('script')
-    .detach();
+    const $content = $body
+        .children()
+        .not($printContainer)
+        .not('script')
+        .detach();
 
-  /**
-   * Needed for those who use Bootstrap 3.x, because some of
-   * its `@media print` styles ain't play nicely when printing.
-   */
-  const $patchedStyle = $('<style media="print">')
-    .text(`
+    /**
+     * Needed for those who use Bootstrap 3.x, because some of
+     * its `@media print` styles ain't play nicely when printing.
+     */
+    const $patchedStyle = $('<style media="print">')
+        .text(`
       img { max-width: none !important; }
       a[href]:after { content: ""; }
     `)
-    .appendTo('head');
+        .appendTo('head');
 
-  window.print();
+    window.print();
 
-  $body.prepend($content);
-  $mapContainerParent.prepend($mapContainer);
+    $body.prepend($content);
+    $mapContainerParent.prepend($mapContainer);
 
-  $printContainer.remove();
-  $patchedStyle.remove();
+    $printContainer.remove();
+    $patchedStyle.remove();
 }
