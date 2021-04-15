@@ -81,11 +81,6 @@
 
 ![Dublin Bikes Demo](images/demo.gif)
 
-
-Here's a blank template to get started:
-**To avoid retyping too much info. Do a search and replace with your text editor for the following:**
-`manningb`, `dublin_bikes`, `twitter_handle`, `brian.manning@ucdconnect.ie`, `Dublin Bikes`, `project_description`
-
 ### Built With
 
 - [Flask](Python)
@@ -121,9 +116,11 @@ This is an example of how to list things you need to use the software and how to
 
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
+- Set your current location by typing in your address into the text box and clicking 'Set Location'
+- Get directions to the closest bike station near you using the 'Find Bike Now' & 'Find Station Now' buttons
+- Get directions from one station to another using the station to station directions feature
+- Get an overview of current bike availability using the colored markers
+- View detailed statistics and predictions by station by clicking on a station's marker and clicking 'View Statistics' or by using the drop down in the navbar
 
 <!-- ROADMAP -->
 
