@@ -455,9 +455,9 @@ function calcRoute(start, end, type) {
     end = new google.maps.LatLng(end[0], end[1]);
     after_directions_latlng = end;
     if (type == "bike") {
-        travel_mode = google.maps.DirectionsTravelMode.BICYCLING;
-    } else {
         travel_mode = google.maps.DirectionsTravelMode.TRANSIT;
+    } else {
+        travel_mode = google.maps.DirectionsTravelMode.BICYCLING;
     }
     var request = {
         origin: start,
