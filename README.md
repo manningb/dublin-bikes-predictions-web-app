@@ -57,6 +57,7 @@
       <a href="#about-the-project">About The Project</a>
       <ul>
         <li><a href="#built-with">Built With</a></li>
+       <li><a href="#contact">Contact</a></li>
       </ul>
     </li>
     <li>
@@ -70,7 +71,6 @@
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
   </ol>
 </details>
@@ -88,6 +88,14 @@
 - [Google Maps & Directions Service APIs]()
 - [Javascript/JQuery]()
 
+<!-- CONTACT -->
+
+## Contact
+Project Link: [https://github.com/manningb/dublin_bikes](https://github.com/manningb/dublin_bikes)
+
+- Brian Manning [brian.manning@ucdconnect.ie](mailto:brian.manning@ucdconnect.ie)
+- Killian Cooney (invicta117) [killian.cooney@ucdconnect.ie](mailto:@ucdconnect.ie)
+- Tom Clancy [@ucdconnect.ie](mailto:@ucdconnect.ie)
 <!-- GETTING STARTED -->
 
 ## Getting Started
@@ -151,14 +159,7 @@ Contributions are what make the open source community such an amazing place to b
 
 Distributed under the MIT License. See `LICENSE` for more information.
 
-<!-- CONTACT -->
 
-## Contact
-Project Link: [https://github.com/manningb/dublin_bikes](https://github.com/manningb/dublin_bikes)
-
-- Brian Manning [brian.manning@ucdconnect.ie](mailto:brian.manning@ucdconnect.ie)
-- Killian Cooney [@ucdconnect.ie](mailto:@ucdconnect.ie)
-- Tom Clancy [@ucdconnect.ie](mailto:@ucdconnect.ie)
 
 <!-- ACKNOWLEDGEMENTS -->
 <!--
