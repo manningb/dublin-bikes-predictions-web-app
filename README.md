@@ -18,14 +18,14 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-
+<!--
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
-
+ -->
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
@@ -103,10 +103,8 @@ To get a local copy up and running follow these simple steps.
 
 This is an example of how to list things you need to use the software and how to install them.
 
-- npm
-  ```sh
-  npm install npm@latest -g
-  ```
+- Python 3
+- Pip
 
 ### Installation
 
@@ -114,9 +112,9 @@ This is an example of how to list things you need to use the software and how to
    ```sh
    git clone https://github.com/manningb/dublin_bikes.git
    ```
-2. Install NPM packages
+2. Install Python packages
    ```sh
-   npm install
+   pip install -r requirements.txt
    ```
 
 <!-- USAGE EXAMPLES -->
@@ -154,19 +152,20 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- CONTACT -->
 
 ## Contact
-
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - brian.manning@ucdconnect.ie
-
 Project Link: [https://github.com/manningb/dublin_bikes](https://github.com/manningb/dublin_bikes)
 
-<!-- ACKNOWLEDGEMENTS -->
+- Brian Manning [brian.manning@ucdconnect.ie](mailto:brian.manning@ucdconnect.ie)
+- Killian Cooney [@ucdconnect.ie](mailto:@ucdconnect.ie)
+- Tom Clancy [@ucdconnect.ie](mailto:@ucdconnect.ie)
 
+<!-- ACKNOWLEDGEMENTS -->
+<!--
 ## Acknowledgements
 
 - []()
 - []()
 - []()
-
+-->
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
