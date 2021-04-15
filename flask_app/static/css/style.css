@@ -243,6 +243,10 @@ small {
   padding-top: 50px;
 }
 
+.adp-warnbox {
+  display:none;
+}
+
 .card {
   height: auto;
   padding: 2rem;
