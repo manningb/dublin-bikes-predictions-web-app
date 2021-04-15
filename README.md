@@ -36,7 +36,7 @@
   <h3 align="center">Dublin Bikes</h3>
 
   <p align="center">
-    Dublin Bikes description
+    <!--Dublin Bikes description-->
     <br />
     <a href="https://github.com/manningb/dublin_bikes"><strong>Explore the docs »</strong></a>
     <br />
