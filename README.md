@@ -116,11 +116,16 @@ This is an example of how to list things you need to use the software and how to
 
 ## Usage
 
-- Set your current location by typing in your address into the text box and clicking 'Set Location'
-- Get directions to the closest bike station near you using the 'Find Bike Now' & 'Find Station Now' buttons
-- Get directions from one station to another using the station to station directions feature
-- Get an overview of current bike availability using the colored markers
-- View detailed statistics and predictions by station by clicking on a station's marker and clicking 'View Statistics' or by using the drop down in the navbar
+- Set your current location by typing in your address into the text box and clicking 'Set Location'![image](https://user-images.githubusercontent.com/10169549/114904277-98c9eb80-9e0f-11eb-939f-20876fdbc522.png)
+
+- Get directions to the closest bike station near you using the 'Find Bike Now' & 'Find Station Now' buttons![image](https://user-images.githubusercontent.com/10169549/114904359-b0a16f80-9e0f-11eb-972a-6e3f19487991.png)
+
+- Get directions from one station to another using the station to station directions feature![image](https://user-images.githubusercontent.com/10169549/114905097-7a182480-9e10-11eb-9f67-b124134af06c.png)
+
+- Get an overview of current bike availability using the colored markers![image](https://user-images.githubusercontent.com/10169549/114904432-c44cd600-9e0f-11eb-80f7-9b1049762723.png)
+
+- View detailed statistics and predictions by station by clicking on a station's marker and clicking 'View Statistics' or by using the drop down in the navbar![image](https://user-images.githubusercontent.com/10169549/114904495-d4fd4c00-9e0f-11eb-916d-9a6821013e97.png)
+
 
 <!-- ROADMAP -->
 
