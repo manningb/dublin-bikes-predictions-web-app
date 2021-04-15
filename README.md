@@ -154,19 +154,20 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- CONTACT -->
 
 ## Contact
-
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - brian.manning@ucdconnect.ie
-
 Project Link: [https://github.com/manningb/dublin_bikes](https://github.com/manningb/dublin_bikes)
 
-<!-- ACKNOWLEDGEMENTS -->
+- Brian Manning [brian.manning@ucdconnect.ie](email:brian.manning@ucdconnect.ie)
+- Killian Cooney []()
+- Tom Clancy []()
 
+<!-- ACKNOWLEDGEMENTS -->
+<!--
 ## Acknowledgements
 
 - []()
 - []()
 - []()
-
+-->
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
