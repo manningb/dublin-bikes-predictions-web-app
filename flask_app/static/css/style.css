@@ -52,6 +52,10 @@ background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(0,146,197,1) 10
   animation-duration: 30s;
 }
 
+.ticker:hover {
+    animation-play-state: paused;
+  }
+
 .ticker-item {
   display: inline-block;
   padding: 0 2rem;
