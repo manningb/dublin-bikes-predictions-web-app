@@ -156,9 +156,9 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ## Contact
 Project Link: [https://github.com/manningb/dublin_bikes](https://github.com/manningb/dublin_bikes)
 
-- Brian Manning [brian.manning@ucdconnect.ie](email:brian.manning@ucdconnect.ie)
-- Killian Cooney []()
-- Tom Clancy []()
+- Brian Manning [brian.manning@ucdconnect.ie](mailto:brian.manning@ucdconnect.ie)
+- Killian Cooney [@ucdconnect.ie](mailto:@ucdconnect.ie)
+- Tom Clancy [@ucdconnect.ie](mailto:@ucdconnect.ie)
 
 <!-- ACKNOWLEDGEMENTS -->
 <!--
