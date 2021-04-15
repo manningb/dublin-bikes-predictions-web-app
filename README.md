@@ -103,10 +103,8 @@ To get a local copy up and running follow these simple steps.
 
 This is an example of how to list things you need to use the software and how to install them.
 
-- npm
-  ```sh
-  npm install npm@latest -g
-  ```
+- Python 3
+- Pip
 
 ### Installation
 
@@ -114,9 +112,9 @@ This is an example of how to list things you need to use the software and how to
    ```sh
    git clone https://github.com/manningb/dublin_bikes.git
    ```
-2. Install NPM packages
+2. Install Python packages
    ```sh
-   npm install
+   pip install -r requirements.txt
    ```
 
 <!-- USAGE EXAMPLES -->
