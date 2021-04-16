@@ -93,9 +93,9 @@
 ## Contact
 Project Link: [https://github.com/manningb/dublin_bikes](https://github.com/manningb/dublin_bikes)
 
-- Brian Manning [brian.manning@ucdconnect.ie](mailto:brian.manning@ucdconnect.ie)
-- Killian Cooney (invicta117) [killian.cooney@ucdconnect.ie](mailto:@ucdconnect.ie)
-- Tom Clancy [@ucdconnect.ie](mailto:@ucdconnect.ie)
+- Brian Manning [(manningb)](https://github.com/manningb) [brian.manning@ucdconnect.ie](mailto:brian.manning@ucdconnect.ie)
+- Killian Cooney [(invicta117)](https://github.com/invicta117) [killian.cooney@ucdconnect.ie](mailto:killian.cooney@ucdconnect.ie)
+- Tom Clancy [(tom15511547)](https://github.com/tom15511547) [tom.clancy.1@ucdconnect.ie](mailto:tom.clancy.1@ucdconnect.ie)
 <!-- GETTING STARTED -->
 
 ## Getting Started
