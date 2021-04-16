@@ -30,6 +30,6 @@ jobs:
         uses: srt32/uptime@v0.2.1
         with:
           # which url to hit
-          url-to-hit: http://dublinbikes.ml/
+          url-to-hit: https://dublinbikes.ml/
           # which http response statuses are expected
           expected-statuses: 200
