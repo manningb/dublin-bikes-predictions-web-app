@@ -24,6 +24,7 @@ def index():
     GMAP_API = os.environ.get("GMAP_API")
     return render_template("index.html", GMAP_API=GMAP_API)
 
+
 @app.route("/statistics")
 def statistics():
     return render_template("main_stats.html")
@@ -33,11 +34,13 @@ def statistics():
 def stationstats(number):
     return render_template("stationstats.html", NUMBER=number)
 
+
 def sql_query(query):
     DB_USER = os.environ.get("DB_USER")
     DB_PASS = os.environ.get("DB_PASS")
     DB_URL = os.environ.get("DB_URL")
-    engine = create_engine("mysql+pymysql://{0}:{1}@{2}/dublin_bikes".format(DB_USER, DB_PASS, DB_URL), echo=True)
+    engine = create_engine(
+        "mysql+pymysql://{0}:{1}@{2}/dublin_bikes".format(DB_USER, DB_PASS, DB_URL), echo=True)
     connection = engine.connect()
 
     rows = engine.execute(query)
@@ -45,17 +48,20 @@ def sql_query(query):
     engine.dispose()
     return rows
 
+
 @app.route("/one_hour-<int:bike_station_num>-<int:day_num>-<int:hour_num>")
 def one_hour(bike_station_num, day_num, hour_num):
-    model = joblib.load(f'../data_analytics/pickles/station-{bike_station_num}')
+    model = joblib.load(
+        f'../data_analytics/pickles/station-{bike_station_num}')
     features = ['temp',  'humidity', 'wind_speed', 'dayquery_Friday', 'dayquery_Monday', 'dayquery_Saturday', 'dayquery_Sunday', 'dayquery_Thursday',
- 'dayquery_Tuesday', 'dayquery_Wednesday', 'weather_main_Clear', 'weather_main_Clouds', 'weather_main_Drizzle', 'weather_main_Fog', 'weather_main_Mist', 'weather_main_Rain']
+                'dayquery_Tuesday', 'dayquery_Wednesday', 'weather_main_Clear', 'weather_main_Clouds', 'weather_main_Drizzle', 'weather_main_Fog', 'weather_main_Mist', 'weather_main_Rain']
 
     DB_USER = os.environ.get("DB_USER")
     DB_PASS = os.environ.get("DB_PASS")
     DB_URL = os.environ.get("DB_URL")
 
-    engine = create_engine("mysql+pymysql://{0}:{1}@{2}".format(DB_USER, DB_PASS, DB_URL), echo=True)
+    engine = create_engine(
+        "mysql+pymysql://{0}:{1}@{2}".format(DB_USER, DB_PASS, DB_URL), echo=True)
     connection = engine.connect()
 
     statement = f"""SELECT last_update, dayname(last_update) as dayquery, hour(last_update) as hourquery, temp, humidity, wind_speed, weather_main FROM dublin_bikes.weather_forecast_1hour
@@ -64,7 +70,8 @@ def one_hour(bike_station_num, day_num, hour_num):
     limit 1;"""
     sql_query(statement)
     df_future = pd.read_sql_query(statement, engine)
-    categorical_columns = df_future[['dayquery', 'hourquery', 'weather_main', 'dayquery', 'hourquery']].columns
+    categorical_columns = df_future[[
+        'dayquery', 'hourquery', 'weather_main', 'dayquery', 'hourquery']].columns
     # Convert data type to category for these columns
     for column in categorical_columns:
         df_future[column] = df_future[column].astype('category')
@@ -75,16 +82,19 @@ def one_hour(bike_station_num, day_num, hour_num):
         if col not in df_final_future.columns:
             df_final_future[col] = [0 for i in range(len(df_final_future))]
     result = model.predict(df_final_future[features])
-    dictionary = dict(zip(df_final_future["last_update"].astype(str).to_list(), result.tolist()))
+    dictionary = dict(
+        zip(df_final_future["last_update"].astype(str).to_list(), result.tolist()))
     connection.close()
     engine.dispose()
     return jsonify(dictionary)
+
 
 @app.route("/hour48-<int:number>")
 def hour48(number):
     model = joblib.load(f'../data_analytics/pickles/station-{number}.pkl')
 
-    features = ['temp', 'humidity', 'wind_speed', 'pressure', 'dayquery_Friday', 'dayquery_Monday', 'dayquery_Saturday', 'dayquery_Sunday', 'dayquery_Thursday', 'dayquery_Tuesday', 'dayquery_Wednesday', 'weather_main_Clear', 'weather_main_Clouds', 'weather_main_Drizzle', 'weather_main_Fog', 'weather_main_Mist', 'weather_main_Rain', 'weather_main_Snow', 'weather_main_Thunderstorm', 'hourquery_0', 'hourquery_1', 'hourquery_2', 'hourquery_3', 'hourquery_4', 'hourquery_5', 'hourquery_6', 'hourquery_7', 'hourquery_8', 'hourquery_9', 'hourquery_10', 'hourquery_11', 'hourquery_12', 'hourquery_13', 'hourquery_14', 'hourquery_15', 'hourquery_16', 'hourquery_17', 'hourquery_18', 'hourquery_19', 'hourquery_20', 'hourquery_21', 'hourquery_22', 'hourquery_23']
+    features = ['temp', 'humidity', 'wind_speed', 'pressure', 'dayquery_Friday', 'dayquery_Monday', 'dayquery_Saturday', 'dayquery_Sunday', 'dayquery_Thursday', 'dayquery_Tuesday', 'dayquery_Wednesday', 'weather_main_Clear', 'weather_main_Clouds', 'weather_main_Drizzle', 'weather_main_Fog', 'weather_main_Mist', 'weather_main_Rain', 'weather_main_Snow', 'weather_main_Thunderstorm',
+                'hourquery_0', 'hourquery_1', 'hourquery_2', 'hourquery_3', 'hourquery_4', 'hourquery_5', 'hourquery_6', 'hourquery_7', 'hourquery_8', 'hourquery_9', 'hourquery_10', 'hourquery_11', 'hourquery_12', 'hourquery_13', 'hourquery_14', 'hourquery_15', 'hourquery_16', 'hourquery_17', 'hourquery_18', 'hourquery_19', 'hourquery_20', 'hourquery_21', 'hourquery_22', 'hourquery_23']
 
     print(len(features))
     # importance = model.feature_importances_
@@ -96,7 +106,8 @@ def hour48(number):
     DB_PASS = os.environ.get("DB_PASS")
     DB_URL = os.environ.get("DB_URL")
 
-    engine = create_engine("mysql+pymysql://{0}:{1}@{2}".format(DB_USER, DB_PASS, DB_URL), echo=True)
+    engine = create_engine(
+        "mysql+pymysql://{0}:{1}@{2}".format(DB_USER, DB_PASS, DB_URL), echo=True)
     connection = engine.connect()
 
     statement = f"""SELECT last_update, dayname(last_update) as dayquery, hour(last_update) as hourquery, temp, humidity, pressure, wind_speed, weather_main FROM dublin_bikes.weather_forecast_1hour
@@ -104,7 +115,8 @@ def hour48(number):
     order by time_queried desc, last_update
     limit 48;"""
     df_future = pd.read_sql_query(statement, engine)
-    categorical_columns = df_future[['dayquery', 'hourquery', 'weather_main', 'dayquery', 'hourquery']].columns
+    categorical_columns = df_future[[
+        'dayquery', 'hourquery', 'weather_main', 'dayquery', 'hourquery']].columns
     # Convert data type to category for these columns
     for column in categorical_columns:
         df_future[column] = df_future[column].astype('category')
@@ -118,10 +130,12 @@ def hour48(number):
     print(len(df_final_future.columns))
 
     result = model.predict(df_final_future[features])
-    dictionary = dict(zip(df_final_future["last_update"].astype(str).to_list(), result.tolist()))
+    dictionary = dict(
+        zip(df_final_future["last_update"].astype(str).to_list(), result.tolist()))
     connection.close()
     engine.dispose()
     return jsonify(dictionary)
+
 
 @app.route("/statstation-<int:number>")
 def statstation(number):
@@ -129,7 +143,8 @@ def statstation(number):
     DB_PASS = os.environ.get("DB_PASS")
     DB_URL = os.environ.get("DB_URL")
 
-    engine = create_engine("mysql+pymysql://{0}:{1}@{2}/dublin_bikes".format(DB_USER, DB_PASS, DB_URL), echo=True)
+    engine = create_engine(
+        "mysql+pymysql://{0}:{1}@{2}/dublin_bikes".format(DB_USER, DB_PASS, DB_URL), echo=True)
     connection = engine.connect()
 
     sql_create_schema = f"""SELECT * FROM dublin_bikes.availability
@@ -145,12 +160,14 @@ order by time_queried asc;"""
     engine.dispose()
     return jsonify(station=stations)  # return json string of data
 
+
 @app.route("/averagestation-<int:number>")
 def averagestation(number):
     DB_USER = os.environ.get("DB_USER")
     DB_PASS = os.environ.get("DB_PASS")
     DB_URL = os.environ.get("DB_URL")
-    engine = create_engine("mysql+pymysql://{0}:{1}@{2}/dublin_bikes".format(DB_USER, DB_PASS, DB_URL), echo=True)
+    engine = create_engine(
+        "mysql+pymysql://{0}:{1}@{2}/dublin_bikes".format(DB_USER, DB_PASS, DB_URL), echo=True)
     connection = engine.connect()
     sql_create_schema = f"""SELECT cast(avg(available_bikes) as char) as avgavailbikes, cast(avg(available_bike_stands) as char)as avgavailbikestation, Year(time_queried) as yearq, month(time_queried) as monthq, day(time_queried) as dateq FROM dublin_bikes.availability
 where number = {number}
@@ -166,6 +183,7 @@ order by time_queried desc;"""
         print(row)
     print(stations)
     return jsonify(stations)
+
 
 @app.route("/stations")
 def static_bikes():
@@ -184,13 +202,15 @@ def static_bikes():
     """  # create select statement for stations table
         print("INSIDE 1")
         rows = sql_query(sql_get_availability)  # execute select statement
-        
+
         last_updated_availability_data = []
         for row in rows:
-            last_updated_availability_data.append(dict(row))  # inset dict of data into list
+            last_updated_availability_data.append(
+                dict(row))  # inset dict of data into list
             print(row)
         last_updated_availability_time = datetime.datetime.now()
-    return jsonify(station=last_updated_availability_data)  # return json string of data
+    # return json string of data
+    return jsonify(station=last_updated_availability_data)
 
 
 @app.route("/current_weather")
@@ -212,12 +232,14 @@ def current_weather():
         rows = sql_query(sql_get_weather)
         last_updated_weather_data = []
         for row in rows:
-            last_updated_weather_data.append(dict(row))  # inset dict of data into list
+            # inset dict of data into list
+            last_updated_weather_data.append(dict(row))
             print(row)
         last_updated_weather_time = datetime.datetime.now()
-    return jsonify(weather=last_updated_weather_data)  # return json string of data
+    # return json string of data
+    return jsonify(weather=last_updated_weather_data)
 
 
 if __name__ == "__main__":
     # default port is 5000 if you don't specify
-    app.run(debug=False, port=5000)
+    app.run(host="0.0.0.0", port=5000)
