@@ -5,7 +5,7 @@ import joblib
 import pandas as pd
 from flask import Flask, render_template, jsonify
 from sqlalchemy import create_engine, engine
-
+import sqlalchemy
 app = Flask("__name__", template_folder="templates")
 
 
@@ -39,15 +39,8 @@ def sql_query(query):
     DB_USER = os.environ.get("DB_USER")
     DB_PASS = os.environ.get("DB_PASS")
     DB_URL = os.environ.get("DB_URL")
-    # engine = create_engine(
-    #     "mysql+pymysql://{0}:{1}@{2}/dublin_bikes".format(DB_USER, DB_PASS, DB_URL), echo=True)
-
     engine = create_engine(
-
-        # Equivalent URL:
-        # postgres+pg8000://<db_user>:<db_pass>@/<db_name>
-        #                         ?unix_sock=<socket_path>/<cloud_sql_instance_name>/.s.PGSQL.5432
-        engine.url.URL(
+        sqlalchemy.engine.url.URL(
             drivername="mysql+pymysql",
             username=DB_USER,  # e.g. "my-database-user"
             password=DB_PASS,  # e.g. "my-database-password"
@@ -77,7 +70,16 @@ def one_hour(bike_station_num, day_num, hour_num):
     DB_URL = os.environ.get("DB_URL")
 
     engine = create_engine(
-        "mysql+pymysql://{0}:{1}@{2}".format(DB_USER, DB_PASS, DB_URL), echo=True)
+        sqlalchemy.engine.url.URL(
+            drivername="mysql+pymysql",
+            username=DB_USER,  # e.g. "my-database-user"
+            password=DB_PASS,  # e.g. "my-database-password"
+            database=DB_URL,  # e.g. "my-database-name"
+            query={
+                "unix_sock": "/tmp/mysql.sock"
+            }
+        ), echo=True
+    )
     connection = engine.connect()
 
     statement = f"""SELECT last_update, dayname(last_update) as dayquery, hour(last_update) as hourquery, temp, humidity, wind_speed, weather_main FROM dublin_bikes.weather_forecast_1hour
@@ -123,7 +125,16 @@ def hour48(number):
     DB_URL = os.environ.get("DB_URL")
 
     engine = create_engine(
-        "mysql+pymysql://{0}:{1}@{2}".format(DB_USER, DB_PASS, DB_URL), echo=True)
+        sqlalchemy.engine.url.URL(
+            drivername="mysql+pymysql",
+            username=DB_USER,  # e.g. "my-database-user"
+            password=DB_PASS,  # e.g. "my-database-password"
+            database=DB_URL,  # e.g. "my-database-name"
+            query={
+                "unix_sock": "/tmp/mysql.sock"
+            }
+        ), echo=True
+    )
     connection = engine.connect()
 
     statement = f"""SELECT last_update, dayname(last_update) as dayquery, hour(last_update) as hourquery, temp, humidity, pressure, wind_speed, weather_main FROM dublin_bikes.weather_forecast_1hour
@@ -160,7 +171,16 @@ def statstation(number):
     DB_URL = os.environ.get("DB_URL")
 
     engine = create_engine(
-        "mysql+pymysql://{0}:{1}@{2}/dublin_bikes".format(DB_USER, DB_PASS, DB_URL), echo=True)
+        sqlalchemy.engine.url.URL(
+            drivername="mysql+pymysql",
+            username=DB_USER,  # e.g. "my-database-user"
+            password=DB_PASS,  # e.g. "my-database-password"
+            database=DB_URL,  # e.g. "my-database-name"
+            query={
+                "unix_sock": "/tmp/mysql.sock"
+            }
+        ), echo=True
+    )
     connection = engine.connect()
 
     sql_create_schema = f"""SELECT * FROM dublin_bikes.availability
@@ -183,7 +203,16 @@ def averagestation(number):
     DB_PASS = os.environ.get("DB_PASS")
     DB_URL = os.environ.get("DB_URL")
     engine = create_engine(
-        "mysql+pymysql://{0}:{1}@{2}/dublin_bikes".format(DB_USER, DB_PASS, DB_URL), echo=True)
+        sqlalchemy.engine.url.URL(
+            drivername="mysql+pymysql",
+            username=DB_USER,  # e.g. "my-database-user"
+            password=DB_PASS,  # e.g. "my-database-password"
+            database=DB_URL,  # e.g. "my-database-name"
+            query={
+                "unix_sock": "/tmp/mysql.sock"
+            }
+        ), echo=True
+    )
     connection = engine.connect()
     sql_create_schema = f"""SELECT cast(avg(available_bikes) as char) as avgavailbikes, cast(avg(available_bike_stands) as char)as avgavailbikestation, Year(time_queried) as yearq, month(time_queried) as monthq, day(time_queried) as dateq FROM dublin_bikes.availability
 where number = {number}
