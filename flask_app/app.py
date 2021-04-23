@@ -4,7 +4,7 @@ import os
 import joblib
 import pandas as pd
 from flask import Flask, render_template, jsonify
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, engine
 
 app = Flask("__name__", template_folder="templates")
 
@@ -39,8 +39,24 @@ def sql_query(query):
     DB_USER = os.environ.get("DB_USER")
     DB_PASS = os.environ.get("DB_PASS")
     DB_URL = os.environ.get("DB_URL")
+    # engine = create_engine(
+    #     "mysql+pymysql://{0}:{1}@{2}/dublin_bikes".format(DB_USER, DB_PASS, DB_URL), echo=True)
+
     engine = create_engine(
-        "mysql+pymysql://{0}:{1}@{2}/dublin_bikes".format(DB_USER, DB_PASS, DB_URL), echo=True)
+
+        # Equivalent URL:
+        # postgres+pg8000://<db_user>:<db_pass>@/<db_name>
+        #                         ?unix_sock=<socket_path>/<cloud_sql_instance_name>/.s.PGSQL.5432
+        engine.url.URL(
+            drivername="mysql+pymysql",
+            username=DB_USER,  # e.g. "my-database-user"
+            password=DB_PASS,  # e.g. "my-database-password"
+            database=DB_URL,  # e.g. "my-database-name"
+            query={
+                "unix_sock": "/tmp/mysql.sock"
+            }
+        ), echo=True
+    )
     connection = engine.connect()
 
     rows = engine.execute(query)
